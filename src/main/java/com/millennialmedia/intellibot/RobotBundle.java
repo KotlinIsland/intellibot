@@ -1,6 +1,6 @@
 package com.millennialmedia.intellibot;
 
-import com.intellij.CommonBundle;
+import com.intellij.AbstractBundle;
 import com.intellij.reference.SoftReference;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
@@ -24,7 +24,7 @@ public class RobotBundle {
     }
 
     public static String message(@NonNls @PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
-        return CommonBundle.message(getBundle(), key, params);
+        return AbstractBundle.message(getBundle(), key, params);
     }
 
     // Cached loading
@@ -32,7 +32,7 @@ public class RobotBundle {
         ResourceBundle bundle = SoftReference.dereference(instance);
         if (bundle == null) {
             bundle = ResourceBundle.getBundle(BUNDLE);
-            instance = new SoftReference<ResourceBundle>(bundle);
+            instance = new SoftReference<>(bundle);
         }
         return bundle;
     }
