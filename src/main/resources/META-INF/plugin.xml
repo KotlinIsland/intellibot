@@ -4,25 +4,20 @@
     <version>0.10.143.395</version>
     <vendor email="intellibot@millennialmedia.com" url="http://www.millennialmedia.com">Millennial Media</vendor>
 
+    <!-- PyCharm / Python plugin dependency -->
     <depends>com.intellij.modules.lang</depends>
-    <depends optional="true">com.intellij.modules.python</depends>
-    <!-- Ultimate -->
-    <!--suppress PluginXmlValidity -->
-    <depends optional="true">Pythonid</depends>
-    <!-- Community Edition -->
-    <!--suppress PluginXmlValidity -->
-    <depends optional="true">PythonCore</depends>
+    <depends>com.intellij.modules.python</depends>
 
     <description><![CDATA[
       <h1>IntelliBot, Robot Framework Support</h1>
-      <p>The IntelliBot plugin for IntelliJ/Pycharm adds smart editing features to support the <a href="http://robotframework.org/">Robot Framework</a>.</p>
-      <p>Make sure to <a href="https://github.com/millennialmedia/intellibot/wiki/Python-Interpreter">setup your IDE correctly</a> to gain Python support.</p>
-      <p>Find us in <a href="https://github.com/millennialmedia/intellibot">Github</a>.</p>
+      <p>The IntelliBot plugin for IntelliJ/Pycharm adds smart editing features to support the <a href="https://robotframework.org/">Robot Framework</a>.</p>
+      <p>Make sure to <a href="https://github.com/Ite2000/intellibot/wiki/Python-Interpreter">setup your IDE correctly</a> to gain Python support.</p>
+      <p>Find us in <a href="https://github.com/Ite2000/intellibot">Github</a>.</p>
       <ul>
-        <li><a href="https://github.com/millennialmedia/intellibot/wiki/Features">Feature Set</a></li>
-        <li><a href="https://github.com/millennialmedia/intellibot/wiki">Wiki</a></li>
-        <li><a href="https://github.com/millennialmedia/intellibot/issues">Issue tracker</a></li>
-        <li><a href="https://github.com/millennialmedia/intellibot/wiki/Change-Notes">Complete Change Notes</a>
+        <li><a href="https://github.com/Ite2000/intellibot/wiki/Features">Feature Set</a></li>
+        <li><a href="https://github.com/Ite2000/intellibot/wiki">Wiki</a></li>
+        <li><a href="https://github.com/Ite2000/intellibot/issues">Issue tracker</a></li>
+        <li><a href="https://github.com/Ite2000/intellibot/wiki/Change-Notes">Complete Change Notes</a>
       </ul>
       ]]></description>
 
@@ -59,7 +54,13 @@
         <projectService serviceImplementation="com.millennialmedia.intellibot.psi.RobotProjectData"/>
         <typedHandler implementation="com.millennialmedia.intellibot.ide.RobotTypedHandlerDelegate"/>
 
-        <fileTypeFactory implementation="com.millennialmedia.intellibot.psi.RobotFileTypeHandler"/>
+        <fileType
+            name="RobotFramework"
+            implementationClass="com.millennialmedia.intellibot.psi.RobotFileTypeHandler"
+            fieldName="INSTANCE"
+            language="Robot"
+            extensions="robot"
+        />
         <colorSettingsPage implementation="com.millennialmedia.intellibot.ide.config.RobotColorsPage"/>
 
         <!-- IDE Hooks -->
