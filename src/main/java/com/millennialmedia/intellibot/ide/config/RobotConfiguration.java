@@ -1,7 +1,6 @@
 package com.millennialmedia.intellibot.ide.config;
 
 import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.Nls;
@@ -16,7 +15,7 @@ import javax.swing.*;
  */
 public class RobotConfiguration implements SearchableConfigurable, Configurable.NoScroll {
 
-    private RobotOptionsProvider provider;
+    private final RobotOptionsProvider provider;
 
     private JPanel panel;
     private JCheckBox enableDebug;
@@ -79,7 +78,7 @@ public class RobotConfiguration implements SearchableConfigurable, Configurable.
     }
 
     @Override
-    public void apply() throws ConfigurationException {
+    public void apply() {
         this.provider.setDebug(this.enableDebug.isSelected());
         this.provider.setGlobalVariables(this.allowGlobalVariables.isSelected());
         this.provider.setCapitalizeKeywords(this.capitalizeKeywords.isSelected());

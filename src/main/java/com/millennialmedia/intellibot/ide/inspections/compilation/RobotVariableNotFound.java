@@ -61,9 +61,7 @@ public class RobotVariableNotFound extends SimpleRobotInspection {
                 // if there is only one argument then we might want to see where it was created
                 if (((KeywordStatement) container).getGlobalVariable() != null) {
                     List<Argument> arguments = ((KeywordStatement) container).getArguments();
-                    if (arguments.size() > 1 && element == arguments.get(0)) {
-                        return true;
-                    }
+                    return arguments.size() > 1 && element == arguments.get(0);
                 }
             }
             return false;

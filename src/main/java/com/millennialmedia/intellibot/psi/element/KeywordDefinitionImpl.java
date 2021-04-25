@@ -1,7 +1,6 @@
 package com.millennialmedia.intellibot.psi.element;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiNameIdentifierOwner;
@@ -25,7 +24,7 @@ import java.util.regex.Pattern;
  */
 public class KeywordDefinitionImpl extends RobotPsiElementBase implements KeywordDefinition, DefinedKeyword, PerformanceEntity, PsiNameIdentifierOwner {
 
-    private static final Pattern PATTERN = Pattern.compile("(.*?)(\\$\\{.*?\\})(.*)");
+    private static final Pattern PATTERN = Pattern.compile("(.*?)(\\$\\{.*?})(.*)");
     private static final String ANY = ".*?";
     private static final String DOT = ".";
 
@@ -53,10 +52,9 @@ public class KeywordDefinitionImpl extends RobotPsiElementBase implements Keywor
     }
 
     private List<KeywordInvokable> collectInvokedKeywords() {
-        List<KeywordInvokable> results = new ArrayList<KeywordInvokable>();
+        List<KeywordInvokable> results = new ArrayList<>();
         for (PsiElement statement : getChildren()) {
             if (statement instanceof KeywordStatement || statement instanceof BracketSetting) {
-                //noinspection unchecked
                 results.addAll(PsiTreeUtil.collectElementsOfType(statement, KeywordInvokable.class));
             }
         }
@@ -66,7 +64,7 @@ public class KeywordDefinitionImpl extends RobotPsiElementBase implements Keywor
     @NotNull
     @Override
     public Collection<DefinedVariable> getDeclaredVariables() {
-        Collection<DefinedVariable> results = new LinkedHashSet<DefinedVariable>();
+        Collection<DefinedVariable> results = new LinkedHashSet<>();
         results.addAll(getArguments());
         results.addAll(getInlineVariables());
         return results;
@@ -91,7 +89,7 @@ public class KeywordDefinitionImpl extends RobotPsiElementBase implements Keywor
 
     @NotNull
     private Collection<DefinedVariable> collectInlineVariables() {
-        Collection<DefinedVariable> results = new LinkedHashSet<DefinedVariable>();
+        Collection<DefinedVariable> results = new LinkedHashSet<>();
         for (PsiElement child : getChildren()) {
             if (child instanceof KeywordDefinitionId) {
                 for (PsiElement grandChild : child.getChildren()) {
@@ -118,7 +116,7 @@ public class KeywordDefinitionImpl extends RobotPsiElementBase implements Keywor
 
     @NotNull
     private Collection<DefinedVariable> determineArguments() {
-        Collection<DefinedVariable> results = new LinkedHashSet<DefinedVariable>();
+        Collection<DefinedVariable> results = new LinkedHashSet<>();
         for (PsiElement child : getChildren()) {
             if (child instanceof BracketSetting) {
                 BracketSetting bracket = (BracketSetting) child;
@@ -207,7 +205,7 @@ public class KeywordDefinitionImpl extends RobotPsiElementBase implements Keywor
     private String buildPattern(String namespace, String text) {
         Matcher matcher = PATTERN.matcher(text);
 
-        String result = "";
+        String result;
         if (matcher.matches()) {
             result = buildPatternEmbedding(text);
         } else {

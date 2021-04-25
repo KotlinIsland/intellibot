@@ -141,7 +141,7 @@ public class HeadingImpl extends RobotPsiElementBase implements Heading {
     private Collection<DefinedVariable> collectVariables() {
         if (! containsVariables())
             return Collections.emptySet();
-        Collection<DefinedVariable> results = new LinkedHashSet<DefinedVariable>();
+        Collection<DefinedVariable> results = new LinkedHashSet<>();
         if (containsVariables()) {
             for (PsiElement child : getChildren()) {
                 if (child instanceof DefinedVariable) {
@@ -172,7 +172,7 @@ public class HeadingImpl extends RobotPsiElementBase implements Heading {
         if (!containsKeywordDefinitions()) {
             return Collections.emptySet();
         }
-        Collection<DefinedKeyword> results = new LinkedHashSet<DefinedKeyword>();
+        Collection<DefinedKeyword> results = new LinkedHashSet<>();
         for (PsiElement child : getChildren()) {
             if (child instanceof DefinedKeyword) {
                 results.add(((DefinedKeyword) child));
@@ -199,7 +199,7 @@ public class HeadingImpl extends RobotPsiElementBase implements Heading {
         if (!containsTestCases()) {
             return Collections.emptySet();
         }
-        Collection<DefinedKeyword> results = new LinkedHashSet<DefinedKeyword>();
+        Collection<DefinedKeyword> results = new LinkedHashSet<>();
         for (PsiElement child : getChildren()) {
             if (child instanceof DefinedKeyword) {
                 results.add(((DefinedKeyword) child));
@@ -223,7 +223,7 @@ public class HeadingImpl extends RobotPsiElementBase implements Heading {
 
     @NotNull
     private Collection<PsiFile> collectReferencedFiles() {
-        Collection<PsiFile> results = new HashSet<PsiFile>();
+        Collection<PsiFile> results = new HashSet<>();
         for (KeywordInvokable keyword : getInvokedKeywords()) {
             PsiReference reference = keyword.getReference();
             if (reference != null) {
@@ -297,7 +297,7 @@ public class HeadingImpl extends RobotPsiElementBase implements Heading {
 
     @NotNull
     private MultiMap<String, KeywordInvokable> collectKeywordReferences() {
-        MultiMap<String, KeywordInvokable> results = new MultiMap<String, KeywordInvokable>();
+        MultiMap<String, KeywordInvokable> results = new MultiMap<>();
         for (KeywordInvokable invokable : getInvokedKeywords()) {
             PsiReference reference = invokable.getReference();
             if (reference != null) {
@@ -348,7 +348,7 @@ public class HeadingImpl extends RobotPsiElementBase implements Heading {
         if (! containsImports()) {
             return Collections.emptySet();
         }
-        Collection<KeywordFile> files = new LinkedHashSet<KeywordFile>();
+        Collection<KeywordFile> files = new LinkedHashSet<>();
         Collection<Import> imports = PsiTreeUtil.findChildrenOfType(this, Import.class);
         for (Import imp : imports) {
             Argument argument = PsiTreeUtil.findChildOfType(imp, Argument.class);

@@ -28,10 +28,10 @@ public class RobotFoldingBuilder implements FoldingBuilder, DumbAware {
     private static final TokenSet BLOCKS_TO_FOLD = TokenSet.create(RobotTokenTypes.KEYWORD_DEFINITION, RobotTokenTypes.HEADING);
 
     @NotNull
-    public FoldingDescriptor[] buildFoldRegions(@NotNull ASTNode node, @NotNull Document document) {
-        Collection<FoldingDescriptor> descriptors = new ArrayList<FoldingDescriptor>();
+    public FoldingDescriptor @NotNull [] buildFoldRegions(@NotNull ASTNode node, @NotNull Document document) {
+        Collection<FoldingDescriptor> descriptors = new ArrayList<>();
         appendDescriptors(node, descriptors);
-        return descriptors.toArray(new FoldingDescriptor[descriptors.size()]);
+        return descriptors.toArray(new FoldingDescriptor[0]);
     }
 
     private void appendDescriptors(ASTNode node, Collection<FoldingDescriptor> descriptors) {

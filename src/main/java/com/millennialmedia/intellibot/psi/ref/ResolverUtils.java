@@ -5,7 +5,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.millennialmedia.intellibot.psi.dto.ImportType;
 import com.millennialmedia.intellibot.psi.element.*;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -54,7 +53,7 @@ public class ResolverUtils {
         return null;
     }
 
-    private static final Pattern VARIABLE_BASENAME = Pattern.compile("([\\$\\@\\%\\&]\\{[a-zA-Z0-9 _]+)[^a-zA-Z0-9 _}].*");
+    private static final Pattern VARIABLE_BASENAME = Pattern.compile("([$@%&]\\{[a-zA-Z0-9 _]+)[^a-zA-Z0-9 _}].*");
     @Nullable
     public static PsiElement resolveVariableFromFile(@Nullable String variableText, @Nullable PsiFile file) {
         if (variableText == null) {

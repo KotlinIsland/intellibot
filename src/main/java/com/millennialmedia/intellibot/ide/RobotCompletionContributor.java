@@ -55,10 +55,10 @@ public class RobotCompletionContributor extends CompletionContributor {
         // This is the rule for adding Headings (*** Settings ***, *** Test Cases ***)
         extend(CompletionType.BASIC,
                 psiElement().inFile(psiElement(RobotFile.class)),
-                new CompletionProvider<CompletionParameters>() {
+                new CompletionProvider<>() {
                     @Override
                     protected void addCompletions(@NotNull CompletionParameters parameters,
-                                                  ProcessingContext context,
+                                                  @NotNull ProcessingContext context,
                                                   @NotNull CompletionResultSet results) {
                         addSyntaxLookup(RobotTokenTypes.HEADING, results, NEW_LINE);
                     }
@@ -66,10 +66,10 @@ public class RobotCompletionContributor extends CompletionContributor {
         // This is the rule for adding Bracket Settings ([Tags], [Setup])
         extend(CompletionType.BASIC,
                 psiElement().inFile(psiElement(RobotFile.class)),
-                new CompletionProvider<CompletionParameters>() {
+                new CompletionProvider<>() {
                     @Override
                     protected void addCompletions(@NotNull CompletionParameters parameters,
-                                                  ProcessingContext context,
+                                                  @NotNull ProcessingContext context,
                                                   @NotNull CompletionResultSet results) {
                         // TODO: some brackets are only for Test Cases, some only Keywords, some both
                         PsiElement heading = getHeading(parameters.getOriginalPosition());
@@ -81,10 +81,10 @@ public class RobotCompletionContributor extends CompletionContributor {
         // This is the rule for adding settings and imports (Library, Test Setup)
         extend(CompletionType.BASIC,
                 psiElement().inFile(psiElement(RobotFile.class)),
-                new CompletionProvider<CompletionParameters>() {
+                new CompletionProvider<>() {
                     @Override
                     protected void addCompletions(@NotNull CompletionParameters parameters,
-                                                  ProcessingContext context,
+                                                  @NotNull ProcessingContext context,
                                                   @NotNull CompletionResultSet results) {
                         PsiElement heading = getHeading(parameters.getOriginalPosition());
                         if (isInSettings(heading)) {
@@ -96,10 +96,10 @@ public class RobotCompletionContributor extends CompletionContributor {
         // This is the rule for adding Gherkin (When, Then)
         extend(CompletionType.BASIC,
                 psiElement().inFile(psiElement(RobotFile.class)),
-                new CompletionProvider<CompletionParameters>() {
+                new CompletionProvider<>() {
                     @Override
                     protected void addCompletions(@NotNull CompletionParameters parameters,
-                                                  ProcessingContext context,
+                                                  @NotNull ProcessingContext context,
                                                   @NotNull CompletionResultSet results) {
                         PsiElement heading = getHeading(parameters.getOriginalPosition());
                         if (isInTestCases(heading)) {
@@ -110,10 +110,10 @@ public class RobotCompletionContributor extends CompletionContributor {
         // This is the rule for adding imported keywords and library methods
         extend(CompletionType.BASIC,
                 psiElement().inFile(psiElement(RobotFile.class)),
-                new CompletionProvider<CompletionParameters>() {
+                new CompletionProvider<>() {
                     @Override
                     protected void addCompletions(@NotNull CompletionParameters parameters,
-                                                  ProcessingContext context,
+                                                  @NotNull ProcessingContext context,
                                                   @NotNull CompletionResultSet result) {
                         PsiElement heading = getHeading(parameters.getOriginalPosition());
                         if (isInTestCases(heading) || isInKeywords(heading)) {
@@ -125,10 +125,10 @@ public class RobotCompletionContributor extends CompletionContributor {
         // TODO: include variables defined in the current statement
         extend(CompletionType.BASIC,
                 psiElement().inFile(psiElement(RobotFile.class)),
-                new CompletionProvider<CompletionParameters>() {
+                new CompletionProvider<>() {
                     @Override
                     protected void addCompletions(@NotNull CompletionParameters parameters,
-                                                  ProcessingContext context,
+                                                  @NotNull ProcessingContext context,
                                                   @NotNull CompletionResultSet result) {
                         PsiElement heading = getHeading(parameters.getOriginalPosition());
                         if (isInTestCases(heading) || isInKeywords(heading) || isInSettings(heading)) {

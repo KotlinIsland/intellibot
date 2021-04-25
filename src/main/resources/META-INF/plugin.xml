@@ -31,21 +31,11 @@
       ]]>
     </change-notes>
 
-    <idea-version since-build="143.381"/>
+    <idea-version since-build="211.*"/>
 
-    <application-components>
-        <!-- Add your application components here -->
-    </application-components>
-
-    <project-components>
-        <component>
-            <implementation-class>com.millennialmedia.intellibot.psi.RobotPsiManager</implementation-class>
-        </component>
-    </project-components>
-
-    <actions>
-        <!-- Add your actions here -->
-    </actions>
+    <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup id="Custom Notification Group" displayType="BALLOON" key="intellibot.debug"/>
+    </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
 

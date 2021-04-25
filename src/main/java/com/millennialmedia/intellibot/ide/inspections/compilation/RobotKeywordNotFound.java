@@ -34,8 +34,7 @@ public class RobotKeywordNotFound extends SimpleRobotInspection {
             }
 
             String text = ((KeywordInvokable) element).getPresentableText();
-            if (SKIP_PATTERN.matcher(text).matches())
-                return true;
+            return SKIP_PATTERN.matcher(text).matches();
 //            if (text.startsWith(":")) {
 //                // TODO: for loops
 //                return true;
@@ -43,7 +42,6 @@ public class RobotKeywordNotFound extends SimpleRobotInspection {
 //                // TODO: for loops
 //                return true;
 //            }
-            return false;
         } else {
             return true;
         }

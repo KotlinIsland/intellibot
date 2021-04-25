@@ -24,8 +24,8 @@ public class RobotGherkinInspection extends SimpleRobotInspection implements Sim
     private static final Collection<String> UPPER;
 
     static {
-        NORMAL = new HashSet<String>();
-        UPPER = new HashSet<String>();
+        NORMAL = new HashSet<>();
+        UPPER = new HashSet<>();
         for (String gherkin : RobotKeywordProvider.getInstance().getSyntaxOfType(RobotTokenTypes.GHERKIN)) {
             NORMAL.add(gherkin);
             UPPER.add(gherkin.toUpperCase());

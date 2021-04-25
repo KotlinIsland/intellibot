@@ -2,7 +2,6 @@ package com.millennialmedia.intellibot.psi.util;
 
 import com.jetbrains.python.psi.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class PythonParser {
 

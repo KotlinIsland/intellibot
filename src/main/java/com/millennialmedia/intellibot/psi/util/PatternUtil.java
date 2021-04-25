@@ -31,7 +31,7 @@ public class PatternUtil {
     private static final String VARIABLE_SEPARATOR = "[ _]*?";
 
     static {
-        VARIABLE_SETTERS = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+        VARIABLE_SETTERS = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
         VARIABLE_SETTERS.add("set test variable");
         VARIABLE_SETTERS.add("set suite variable");
         VARIABLE_SETTERS.add("set global variable");

@@ -1,8 +1,8 @@
 package com.millennialmedia.intellibot.psi;
 
 import com.intellij.lexer.LexerBase;
+import com.intellij.openapi.util.text.Strings;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.util.ArrayUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,12 +27,12 @@ public class RobotLexer extends LexerBase {
     // we might run into max int issues at some point
     private static final int RATE = 12; // this should always be the last state + 1
     private final RobotKeywordProvider keywordProvider;
-    private CharSequence buffer = ArrayUtil.EMPTY_CHAR_SEQUENCE;
+    private CharSequence buffer = Strings.EMPTY_CHAR_SEQUENCE;
     private int startOffset;
     private int endOffset;
     private int position;
     private IElementType currentToken;
-    private Stack<Integer> level = new Stack<Integer>();
+    private Stack<Integer> level = new Stack<>();
 
     public RobotLexer(RobotKeywordProvider provider) {
         this.keywordProvider = provider;
@@ -71,7 +71,7 @@ public class RobotLexer extends LexerBase {
     }
 
     protected static Stack<Integer> fromState(int state) {
-        Stack<Integer> stack = new Stack<Integer>();
+        Stack<Integer> stack = new Stack<>();
         if (state > 0) {
             while (state > 0) {
                 stack.push(state % RATE);
@@ -175,16 +175,7 @@ public class RobotLexer extends LexerBase {
                     this.currentToken = RobotTokenTypes.IMPORT;
                 } else if (this.keywordProvider.isGlobalSetting(word)) {
                     this.currentToken = RobotTokenTypes.SETTING;
-                    if (this.keywordProvider.isSyntaxFollowedByKeyword(word)) {
-                        this.level.push(SYNTAX);
-                    } else if (this.keywordProvider.isSyntaxFollowedByVariableDefinition(word)) {
-                        this.level.push(SETTINGS);
-                    } else if (this.keywordProvider.isSyntaxFollowedByString(word)) {
-                        this.level.push(IMPORT);
-                    } else {
-                        goToEndOfLine();
-                        this.currentToken = RobotTokenTypes.ERROR;
-                    }
+                    hmmmmmmmm(word);
                 } else {
                     goToEndOfLine();
                     this.currentToken = RobotTokenTypes.ERROR;
@@ -246,16 +237,7 @@ public class RobotLexer extends LexerBase {
                         word = getCurrentSequence();
                         if (this.keywordProvider.isSyntaxOfType(RobotTokenTypes.BRACKET_SETTING, word)) {
                             this.currentToken = RobotTokenTypes.BRACKET_SETTING;
-                            if (this.keywordProvider.isSyntaxFollowedByKeyword(word)) {
-                                this.level.push(SYNTAX);
-                            } else if (this.keywordProvider.isSyntaxFollowedByVariableDefinition(word)) {
-                                this.level.push(SETTINGS);
-                            } else if (this.keywordProvider.isSyntaxFollowedByString(word)) {
-                                this.level.push(IMPORT);
-                            } else {
-                                goToEndOfLine();
-                                this.currentToken = RobotTokenTypes.ERROR;
-                            }
+                            hmmmmmmmm(word);
                         } else {
                             this.currentToken = RobotTokenTypes.KEYWORD;
                             this.level.push(KEYWORD);
@@ -332,6 +314,19 @@ public class RobotLexer extends LexerBase {
             } else {
                 throw new RuntimeException("Unknown State: " + state);
             }
+        }
+    }
+
+    private void hmmmmmmmm(String word) {
+        if (this.keywordProvider.isSyntaxFollowedByKeyword(word)) {
+            this.level.push(SYNTAX);
+        } else if (this.keywordProvider.isSyntaxFollowedByVariableDefinition(word)) {
+            this.level.push(SETTINGS);
+        } else if (this.keywordProvider.isSyntaxFollowedByString(word)) {
+            this.level.push(IMPORT);
+        } else {
+            goToEndOfLine();
+            this.currentToken = RobotTokenTypes.ERROR;
         }
     }
 

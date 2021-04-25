@@ -1,5 +1,6 @@
 package com.millennialmedia.intellibot.ide;
 
+import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.editor.markup.RangeHighlighter;
 
 import java.util.ArrayList;
@@ -103,14 +104,9 @@ public class RobotHighlightTest extends AbstractRobotIdeTest {
     }
 
     private List<RangeHighlighter> sortHighlights(RangeHighlighter[] highlights) {
-        List<RangeHighlighter> sorted = new ArrayList<RangeHighlighter>(highlights.length);
+        List<RangeHighlighter> sorted = new ArrayList<>(highlights.length);
         Collections.addAll(sorted, highlights);
-        Collections.sort(sorted, new Comparator<RangeHighlighter>() {
-            @Override
-            public int compare(RangeHighlighter o1, RangeHighlighter o2) {
-                return Integer.compare(o1.getStartOffset(), o2.getStartOffset());
-            }
-        });
+        sorted.sort(Comparator.comparingInt(RangeMarker::getStartOffset));
         return sorted;
     }
 

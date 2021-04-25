@@ -6,6 +6,7 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
@@ -14,9 +15,9 @@ import static org.junit.Assert.assertTrue;
 @RunWith(Parameterized.class)
 public class KeywordParserTest {
 
-    private String namespace;
-    private String keyword;
-    private String pattern;
+    private final String namespace;
+    private final String keyword;
+    private final String pattern;
 
     public KeywordParserTest(String namespace, String keyword, String pattern) {
         this.namespace = namespace;
@@ -25,7 +26,7 @@ public class KeywordParserTest {
     }
 
     @Test
-    public void testBuildPattern() throws Throwable {
+    public void testBuildPattern() {
         String actual = PatternBuilder.parseNamespaceKeyword(namespace, keyword);
         assertEquals(pattern, actual);
 
@@ -38,7 +39,7 @@ public class KeywordParserTest {
     }
 
     @Parameterized.Parameters
-    public static Collection patterns() {
+    public static List<Object[]> patterns() {
         return Arrays.asList(new Object[][]{
                 {"my_file", "This is a test keyword", "(\\Qmy_file.\\E)?\\QThis is a test keyword\\E"},
                 {"my_file", "This is a test keyword with some ${crap in it", "(\\Qmy_file.\\E)?\\QThis is a test keyword with some ${crap in it\\E"},

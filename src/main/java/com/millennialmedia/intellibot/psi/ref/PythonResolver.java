@@ -1,7 +1,7 @@
 package com.millennialmedia.intellibot.psi.ref;
 
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
-import com.intellij.ide.plugins.PluginManager;
+import com.intellij.ide.plugins.PluginManagerCore;
 import com.intellij.notification.*;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
@@ -158,7 +158,7 @@ public class PythonResolver {
         } else {
             String pluginId = PlatformUtils.isCommunityEdition() ? PYTHON_PLUGIN_CE : PYTHON_PLUGIN_U;
             PluginId pythonPluginId = PluginId.getId(pluginId);
-            IdeaPluginDescriptor pythonPlugin = PluginManager.getPlugin(pythonPluginId);
+            IdeaPluginDescriptor pythonPlugin = PluginManagerCore.getPlugin(pythonPluginId);
             if (pythonPlugin != null && pythonPlugin.isEnabled()) {
                 debug(project, String.format("python support enabled by '%s'", pluginId));
                 return true;
@@ -185,11 +185,7 @@ public class PythonResolver {
     private static Collection<PyClass> safeFindClass(@NotNull String name, @NotNull Project project) {
         try {
             return PyClassNameIndex.find(name, project, true);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            // seems to happen if python plugin dependency is not right in this project
-            return Collections.emptyList();
-        } catch (ClassCastException e) {
+        } catch (NullPointerException | ClassCastException e) {
             e.printStackTrace();
             // seems to happen if python plugin dependency is not right in this project
             return Collections.emptyList();
@@ -200,11 +196,7 @@ public class PythonResolver {
     private static Collection<PyTargetExpression> safeFindVariable(@NotNull String name, @NotNull Project project) {
         try {
             return PyVariableNameIndex.find(name, project, null);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            // seems to happen if python plugin dependency is not right in this project
-            return Collections.emptyList();
-        } catch (ClassCastException e) {
+        } catch (NullPointerException | ClassCastException e) {
             e.printStackTrace();
             // seems to happen if python plugin dependency is not right in this project
             return Collections.emptyList();

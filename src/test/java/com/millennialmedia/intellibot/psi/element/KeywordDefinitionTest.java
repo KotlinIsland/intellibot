@@ -9,7 +9,7 @@ import org.junit.runners.Parameterized;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
@@ -22,9 +22,9 @@ import static org.junit.Assert.assertTrue;
 @RunWith(Parameterized.class)
 public class KeywordDefinitionTest {
 
-    private String namespace;
-    private String keyword;
-    private String pattern;
+    private final String namespace;
+    private final String keyword;
+    private final String pattern;
 
     public KeywordDefinitionTest(String namespace, String keyword, String pattern) {
         this.namespace = namespace;
@@ -47,17 +47,13 @@ public class KeywordDefinitionTest {
                     .replace("${date_range}", "Yesterday");
             assertTrue(Pattern.compile(actual).matcher(temp).matches());
             assertTrue(Pattern.compile(actual).matcher(this.namespace + "." + temp).matches());
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
+        } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Parameterized.Parameters
-    public static Collection patterns() {
+    public static List<Object[]> patterns() {
         return Arrays.asList(new Object[][]{
                 {"my_file", "This is a test keyword", "(\\Qmy_file.\\E)?\\QThis is a test keyword\\E"},
                 {"my_file", "This is a test keyword with some ${crap in it", "(\\Qmy_file.\\E)?\\QThis is a test keyword with some ${crap in it\\E"},

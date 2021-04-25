@@ -95,16 +95,13 @@ public class RobotFindUsagesTest extends AbstractRobotIdeTest {
     }
 
     private List<UsageInfo> sortUsages(Collection<UsageInfo> usages) {
-        List<UsageInfo> sorted = new ArrayList<UsageInfo>(usages);
-        Collections.sort(sorted, new Comparator<UsageInfo>() {
-            @Override
-            public int compare(UsageInfo o1, UsageInfo o2) {
-                PsiElement e1 = o1.getElement();
-                PsiElement e2 = o2.getElement();
-                assertNotNull(e1);
-                assertNotNull(e2);
-                return Integer.compare(e1.getTextOffset(), e2.getTextOffset());
-            }
+        List<UsageInfo> sorted = new ArrayList<>(usages);
+        sorted.sort((o1, o2) -> {
+            PsiElement e1 = o1.getElement();
+            PsiElement e2 = o2.getElement();
+            assertNotNull(e1);
+            assertNotNull(e2);
+            return Integer.compare(e1.getTextOffset(), e2.getTextOffset());
         });
         return sorted;
     }

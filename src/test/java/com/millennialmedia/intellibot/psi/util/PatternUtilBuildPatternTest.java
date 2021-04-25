@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
@@ -19,8 +19,8 @@ import static org.junit.Assert.assertTrue;
 public class PatternUtilBuildPatternTest {
 
     private static final String EXPECTED = "[\\$\\@\\%\\&]\\{[ _]*?\\Qv\\E[ _]*?\\Qa\\E[ _]*?\\Qr\\E[ _]*?\\Qi\\E[ _]*?\\Qa\\E[ _]*?\\Qb\\E[ _]*?\\Ql\\E[ _]*?\\Qe\\E[ _]*?((\\..*?)*?(\\[.*?\\])*?)*?\\}(\\[\\d+\\])?";
-    private String name;
-    private String expected;
+    private final String name;
+    private final String expected;
 
     public PatternUtilBuildPatternTest(String name, String expected) {
         this.name = name;
@@ -28,7 +28,7 @@ public class PatternUtilBuildPatternTest {
     }
 
     @Parameterized.Parameters
-    public static Collection patterns() {
+    public static List<Object[]> patterns() {
         return Arrays.asList(new Object[][]{
                 {"variable", EXPECTED},
                 {"${variable}", EXPECTED},

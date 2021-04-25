@@ -11,7 +11,7 @@ dependencies{
     compileOnly("org.jetbrains:annotations:20.1.0")
 }
 
-val intellijVersion = System.getenv().getOrDefault("IDEA_VERSION", "PC-2021.1")
+val intellijVersion: String = System.getenv().getOrDefault("IDEA_VERSION", "PC-2021.1")
 
 val pythonPluginForVersion = mapOf(
     "PC-2021.1" to "python-ce",

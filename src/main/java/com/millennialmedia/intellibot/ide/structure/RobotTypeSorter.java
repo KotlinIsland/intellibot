@@ -22,18 +22,16 @@ public class RobotTypeSorter implements Sorter {
     }
 
     @Override
-    public Comparator getComparator() {
-        return new Comparator() {
-            public int compare(Object o1, Object o2) {
-                if (o1 instanceof RobotStructureViewElement && o2 instanceof RobotStructureViewElement) {
-                    return Integer.compare(
-                            ((RobotStructureViewElement) o1).getType().ordinal(),
-                            ((RobotStructureViewElement) o2).getType().ordinal()
-                    );
+    public Comparator<RobotStructureViewElement> getComparator() {
+        return (o1, o2) -> {
+            if (o1 != null && o2 != null) {
+                return Integer.compare(
+                        o1.getType().ordinal(),
+                        o2.getType().ordinal()
+                );
 
-                }
-                return 0;
             }
+            return 0;
         };
     }
 

@@ -63,7 +63,7 @@ public class KeywordStatementImpl extends RobotPsiElementBase implements Keyword
 
     @NotNull
     private List<Argument> collectArguments() {
-        List<Argument> results = new ArrayList<Argument>();
+        List<Argument> results = new ArrayList<>();
         for (PsiElement element : getChildren()) {
             if (element instanceof Argument) {
                 results.add((Argument) element);

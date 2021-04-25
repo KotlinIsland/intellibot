@@ -81,9 +81,9 @@ public class RobotStructureViewElement implements StructureViewTreeElement {
     }
 
     @NotNull
-    public StructureViewTreeElement[] getChildren() {
+    public StructureViewTreeElement @NotNull [] getChildren() {
         if (this.element instanceof RobotFile) {
-            Collection<StructureViewTreeElement> children = new ArrayList<StructureViewTreeElement>();
+            Collection<StructureViewTreeElement> children = new ArrayList<>();
             Heading[] headings = PsiTreeUtil.getChildrenOfType(this.element, Heading.class);
             if (headings != null) {
                 for (Heading heading : headings) {
@@ -105,7 +105,7 @@ public class RobotStructureViewElement implements StructureViewTreeElement {
                     }
                 }
             }
-            return children.toArray(new StructureViewTreeElement[children.size()]);
+            return children.toArray(new StructureViewTreeElement[0]);
         } else {
             return EMPTY;
         }
@@ -136,9 +136,8 @@ public class RobotStructureViewElement implements StructureViewTreeElement {
     @Override
     public ItemPresentation getPresentation() {
         return new ColoredItemPresentation() {
-            @Nullable
             @Override
-            public String getPresentableText() {
+            public @NotNull String getPresentableText() {
                 return getDisplayName();
             }
 

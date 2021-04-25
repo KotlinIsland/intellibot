@@ -89,8 +89,8 @@ public class RobotHighlighter extends SyntaxHighlighterBase {
     );
 
     static {
-        keys1 = new THashMap<IElementType, TextAttributesKey>();
-        keys2 = new THashMap<IElementType, TextAttributesKey>();
+        keys1 = new THashMap<>();
+        keys2 = new THashMap<>();
 
         keys1.put(RobotTokenTypes.HEADING, HEADING);
         keys1.put(RobotTokenTypes.COMMENT, COMMENT);
@@ -107,7 +107,7 @@ public class RobotHighlighter extends SyntaxHighlighterBase {
     }
 
     @NotNull
-    public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
+    public TextAttributesKey @NotNull [] getTokenHighlights(IElementType tokenType) {
         return pack(keys1.get(tokenType), keys2.get(tokenType));
     }
 }

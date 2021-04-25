@@ -136,10 +136,6 @@ public class RobotFileManager {
             // search global scope... this can get messy
             debug(library, "Attempting global directory search", project);
             result = findGlobalDirectory(library, file[0], file[1], project, originalElement);
-            if (result != null) {
-                addToCache(result, library);
-                return result;
-            }
         } else {
             // search project scope
             debug(library, "Attempting project file search", project);
@@ -151,10 +147,10 @@ public class RobotFileManager {
             // search global scope... this can get messy
             debug(library, "Attempting global file search", project);
             result = findGlobalFile(library, file[0], file[1], project, originalElement);
-            if (result != null) {
-                addToCache(result, library);
-                return result;
-            }
+        }
+        if (result != null) {
+            addToCache(result, library);
+            return result;
         }
         return null;
     }

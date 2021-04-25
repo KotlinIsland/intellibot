@@ -9,7 +9,6 @@ import com.millennialmedia.intellibot.psi.element.DefinedVariable;
 import com.millennialmedia.intellibot.psi.util.PythonParser;
 import com.millennialmedia.intellibot.psi.util.ReservedVariable;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 

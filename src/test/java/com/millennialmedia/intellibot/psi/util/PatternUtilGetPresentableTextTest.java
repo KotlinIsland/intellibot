@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -16,8 +16,8 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Parameterized.class)
 public class PatternUtilGetPresentableTextTest {
 
-    private String text;
-    private String expected;
+    private final String text;
+    private final String expected;
 
     public PatternUtilGetPresentableTextTest(String text, String expected) {
         this.text = text;
@@ -31,7 +31,7 @@ public class PatternUtilGetPresentableTextTest {
     }
 
     @Parameterized.Parameters
-    public static Collection patterns() {
+    public static List<Object[]> patterns() {
         return Arrays.asList(new Object[][]{
                 {null, ""},
                 {"", ""},

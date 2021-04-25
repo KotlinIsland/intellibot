@@ -106,7 +106,7 @@ public class RobotFileImpl extends PsiFileBase implements RobotFile, KeywordFile
     @NotNull
     @Override
     public Collection<DefinedKeyword> getDefinedKeywords() {
-        Collection<DefinedKeyword> results = new LinkedHashSet<DefinedKeyword>();
+        Collection<DefinedKeyword> results = new LinkedHashSet<>();
         for (Heading heading : getHeadings()) {
             results.addAll(heading.getDefinedKeywords());
         }

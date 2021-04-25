@@ -1,14 +1,14 @@
 package com.millennialmedia.intellibot.ide;
 
+import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture;
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import com.millennialmedia.intellibot.ResourceLoader;
 
 /**
  * @author mrubino
  * @since 2016-06-01
  */
-public abstract class AbstractRobotIdeTest extends LightPlatformCodeInsightFixtureTestCase {
+public abstract class AbstractRobotIdeTest extends BasePlatformTestCase {
 
     protected final String  getTestFile() {
         return String.format("%s%s.robot", getTestDataPath(), getTestName(true));

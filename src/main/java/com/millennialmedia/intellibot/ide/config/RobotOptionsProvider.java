@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 @State(
         name = "RobotOptionsProvider",
         storages = {
-                @Storage(file = StoragePathMacros.WORKSPACE_FILE)
+                @Storage(value = StoragePathMacros.WORKSPACE_FILE)
         }
 )
 public class RobotOptionsProvider implements PersistentStateComponent<RobotOptionsProvider.State> {
@@ -34,7 +34,7 @@ public class RobotOptionsProvider implements PersistentStateComponent<RobotOptio
         public boolean expandSuperSpaces = true;
     }
 
-    private State state = new State();
+    private final State state = new State();
 
     public static RobotOptionsProvider getInstance(Project project) {
         return ServiceManager.getService(project, RobotOptionsProvider.class);

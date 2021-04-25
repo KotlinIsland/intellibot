@@ -21,10 +21,10 @@ public class RobotKeywordProvider {
 
 
     private static final RobotKeywordTable KEYWORD_TABLE = new RobotKeywordTable();
-    private static final Set<String> GLOBAL_SETTINGS = new HashSet<String>();
-    private static final Set<String> SETTINGS_FOLLOWED_BY_KEYWORDS = new HashSet<String>();
-    private static final Set<String> SETTINGS_FOLLOWED_BY_STRINGS = new HashSet<String>();
-    private static final Set<String> SETTINGS_FOLLOWED_BY_VARIABLE_DEFINITIONS = new HashSet<String>();
+    private static final Set<String> GLOBAL_SETTINGS = new HashSet<>();
+    private static final Set<String> SETTINGS_FOLLOWED_BY_KEYWORDS = new HashSet<>();
+    private static final Set<String> SETTINGS_FOLLOWED_BY_STRINGS = new HashSet<>();
+    private static final Set<String> SETTINGS_FOLLOWED_BY_VARIABLE_DEFINITIONS = new HashSet<>();
 
     static {
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.HEADING, "*** Settings ***");

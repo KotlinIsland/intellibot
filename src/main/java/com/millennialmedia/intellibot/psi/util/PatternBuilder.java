@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PatternBuilder {
-    private static final Pattern PATTERN = Pattern.compile("(.*?)(\\$\\{.*?\\})(.*)");
+    private static final Pattern PATTERN = Pattern.compile("(.*?)(\\$\\{.*?})(.*)");
     private static final String ANY = ".*?";
     private static final String DOT = ".";
 
