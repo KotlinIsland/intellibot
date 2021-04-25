@@ -24,3 +24,7 @@ intellij {
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_11
+
+tasks.compileJava {
+    options.compilerArgs.add("-Xlint:all")
+}

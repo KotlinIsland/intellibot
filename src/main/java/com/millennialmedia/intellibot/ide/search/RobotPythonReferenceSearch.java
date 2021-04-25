@@ -32,7 +32,7 @@ public class RobotPythonReferenceSearch extends QueryExecutorBase<PsiReference, 
     }
 
     @Override
-    public void processQuery(@NotNull ReferencesSearch.SearchParameters params, @NotNull Processor processor) {
+    public void processQuery(@NotNull ReferencesSearch.SearchParameters params, @NotNull Processor<? super PsiReference> processor) {
         SearchScope searchScope = params.getEffectiveSearchScope();
         boolean localScope = false;
         if (searchScope instanceof GlobalSearchScope) {
@@ -81,12 +81,12 @@ public class RobotPythonReferenceSearch extends QueryExecutorBase<PsiReference, 
 
     private void processKeywordWithInline(@NotNull KeywordDefinition element,
                                           @NotNull SearchScope searchScope,
-                                          @NotNull Processor<PsiReference> processor,
+                                          @NotNull Processor<? super PsiReference> processor,
                                           @NotNull Project project) {
         Collection<VirtualFile> files;
 
         if (searchScope instanceof LocalSearchScope) {
-            files = new HashSet<VirtualFile>();
+            files = new HashSet<>();
             for (PsiElement scopeElement : ((LocalSearchScope) searchScope).getScope()) {
                 files.add(scopeElement.getContainingFile().getVirtualFile());
             }
@@ -98,7 +98,7 @@ public class RobotPythonReferenceSearch extends QueryExecutorBase<PsiReference, 
     }
 
     private void processKeywordWithInline(@NotNull KeywordDefinition element,
-                                          @NotNull Processor<PsiReference> processor,
+                                          @NotNull Processor<? super PsiReference> processor,
                                           @NotNull Project project,
                                           @NotNull Collection<VirtualFile> files) {
         PerformanceCollector debug = new PerformanceCollector((PerformanceEntity) element, "ReferenceSearch");
