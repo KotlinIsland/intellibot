@@ -147,6 +147,7 @@ public class KeywordDefinitionImpl extends RobotPsiElementBase implements Keywor
         this.invokedKeywords = null;
     }
 
+    //  The full name of the keyword is case-, space- and underscore-insensitive, similarly as normal keyword names.
     @Override
     public boolean matches(String text) {
         if (text == null) {
@@ -159,18 +160,18 @@ public class KeywordDefinitionImpl extends RobotPsiElementBase implements Keywor
             namePattern = Pattern.compile(buildPattern(myNamespace, myText.trim()), Pattern.CASE_INSENSITIVE);
             this.pattern = namePattern;
         }
-        text = text.trim();
-        if (namePattern.matcher(text).matches())
-            return true;
-        int p = text.lastIndexOf('.');
-        if (p >= 0) {
-            String lib = text.substring(0, p);
-            String kw = text.substring(p+1).replaceAll("[_ ]", "");
-            text = lib + "." + kw;
-        } else {
-            text = text.replaceAll("[_ ]", "");
-        }
-        return namePattern.matcher(text).matches();
+//        text = text.trim();
+//        if (namePattern.matcher(text).matches())
+//            return true;
+//        int p = text.lastIndexOf('.');
+//        if (p >= 0) {
+//            String lib = text.substring(0, p);
+//            String kw = text.substring(p+1).replaceAll("[_ ]", "");
+//            text = lib + "." + kw;
+//        } else {
+//            text = text.replaceAll("[_ ]", "");
+//        }
+        return namePattern.matcher(text.replaceAll("[_ ]", "")).matches();
     }
 
     @Override
@@ -214,7 +215,7 @@ public class KeywordDefinitionImpl extends RobotPsiElementBase implements Keywor
             result = text.length() > 0 ? Pattern.quote(text.replaceAll("[_ ]", "")) : text;
         }
         if (namespace != null && namespace.length() > 0) {
-            result = "(" + Pattern.quote(namespace + DOT) + ")?" + result;
+            result = "(" + Pattern.quote(namespace.replaceAll("[_ ]", "") + DOT) + ")?" + result;
         }
         return result;
     }

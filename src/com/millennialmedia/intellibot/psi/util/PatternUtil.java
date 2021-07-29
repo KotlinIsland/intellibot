@@ -83,6 +83,9 @@ public class PatternUtil {
         return VARIABLE_SETTERS.contains(functionToKeyword(keyword));
     }
 
+    // TODO:
+    //    Keyword names
+    //    Keyword names used in the test data are compared with method names to find the method implementing these keywords. Name comparison is case-insensitive, and also spaces and underscores are ignored. For example, the method hello maps to the keyword name Hello, hello or even h e l l o. Similarly both the do_nothing and doNothing methods can be used as the Do Nothing keyword in the test data.
     @Nullable
     public static String functionToKeyword(@Nullable String function) {
         return function == null ? null : function.replaceAll(UNDERSCORE, SPACE).trim();
