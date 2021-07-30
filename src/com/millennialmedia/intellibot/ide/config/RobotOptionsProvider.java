@@ -1,10 +1,12 @@
 package com.millennialmedia.intellibot.ide.config;
 
-import com.intellij.notification.NotificationDisplayType;
-import com.intellij.notification.NotificationsConfiguration;
+import com.intellij.notification.*;
 import com.intellij.openapi.components.*;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * @author mrubino
@@ -32,6 +34,7 @@ public class RobotOptionsProvider implements PersistentStateComponent<RobotOptio
         public boolean loadProjectDefaultVariable = false;
         public int maxTransitiveDepth = 99;
         public boolean expandSuperSpaces = true;
+        public String predefinedVariables = "";
     }
 
     private State state = new State();
@@ -57,7 +60,11 @@ public class RobotOptionsProvider implements PersistentStateComponent<RobotOptio
         this.state.loadProjectDefaultVariable = state.loadProjectDefaultVariable;
         this.state.maxTransitiveDepth = state.maxTransitiveDepth;
         this.state.expandSuperSpaces = state.expandSuperSpaces;
+        this.state.predefinedVariables = state.predefinedVariables;
+        setPredefinedVaraibleTable();
     }
+
+    private final Hashtable<String, String> predefinedVaraibleTable = new Hashtable<String, String>();
 
     public boolean isDebug() {
         return this.state.debug;
@@ -131,4 +138,40 @@ public class RobotOptionsProvider implements PersistentStateComponent<RobotOptio
         this.state.expandSuperSpaces = expandSuperSpaces;
     }
 
+    public String predefinedVariables() { return this.state.predefinedVariables; }
+
+    public synchronized void setPredefinedVariables(String predefinedVariables) {
+        this.state.predefinedVariables = predefinedVariables;
+        setPredefinedVaraibleTable();
+    }
+
+    //private static final com.intellij.openapi.diagnostic.Logger LOGGER = com.intellij.openapi.diagnostic.Logger.getInstance(RobotOptionsProvider.class);
+    //private static final com.intellij.openapi.diagnostic.Logger LOGGER = com.intellij.openapi.diagnostic.Logger.getInstance("#intellibot.RobotOptionsProvider");
+
+    private synchronized void setPredefinedVaraibleTable() {
+        predefinedVaraibleTable.clear();
+        String[] lines = this.state.predefinedVariables.split("\n", 0);
+        for (String line: lines) {
+            if (line.isEmpty()) {
+                continue;
+            }
+            String[] words = line.split("=", 2);
+            if (words.length != 2) {
+                continue;
+            }
+            predefinedVaraibleTable.put(words[0].trim(), words[1].trim());
+        }
+        if (isDebug()) {
+            String message = "[RobotOptionsProvider] Variables:\n";
+            for (Map.Entry<String, String> entry : getPredefinedVaraibleTable().entrySet()) {
+                message += entry.getKey() + ": " + entry.getValue() + "\n";
+
+            }
+            Notifications.Bus.notify(new Notification("intellibot.debug", "Debug", message, NotificationType.INFORMATION));
+        }
+    }
+
+    public Hashtable<String, String> getPredefinedVaraibleTable() {
+        return this.predefinedVaraibleTable;
+    }
 }

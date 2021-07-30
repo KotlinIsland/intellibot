@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This handles finding Robot files or python classes/files.
@@ -271,6 +272,9 @@ public class RobotFileManager {
 
     @NotNull
     private static String[] getFilename(@NotNull String path, @NotNull String suffix, @NotNull Project project) {
+        for (Map.Entry<String, String> entry : RobotOptionsProvider.getInstance(project).getPredefinedVaraibleTable().entrySet()) {
+            path = path.replace(entry.getKey(), entry.getValue());
+        }
         // support either / or ${/}
         String[] pathElements = path.split("(\\$\\{)?/(})?");
         String result;
