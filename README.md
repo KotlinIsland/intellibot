@@ -28,12 +28,16 @@ This version of intellibot provide more options, see following picture:
   * support implemented as a directory
   * don't replace "." to "/" in library path if it contain "/"
   * don't resolve library as class if using physical path to library
-  * regard library as directory if using physical path and not end with ".py",
+  * regard library as directory if using physical path and not end with ".py"
   * follow the rule in robot framework user guide as much as possbile
   * strip variable in library path to be part of path name
     * e.g. "Resource %{PATH_1}/file1.robot" will search "Resource PATH_1/file1.robot"
     * it is useful if there're variables in import path but there is not running environment in local
     * provide an option to switch this behaviour on/off
+  * replace variable in library path with user defined value
+    * e.g. if provide "${EXECDIR}=/repo/test/execution" in options, "Resource ${EXECDIR}/file1.robot" will search "/repo/test/execution/file1.robot"
+    * it is useful if there're runtime variables in import path
+    * can work with the option "strip variable in library path" together, and variable replacement will do first.
 
 * Correct the import behavior for Library, Resource and Variables files.
   * import both variable and keyword from Resource.
@@ -60,7 +64,7 @@ This version of intellibot provide more options, see following picture:
   * type cast exception
 
 
-### original readme
+### Original Readme
 This is a work in progress (the product of a 24 hour hack match), though at this point I have devoted far more time than that.
 Related feature request to JetBrains: [IDEA-97678](http://youtrack.jetbrains.com/issue/IDEA-97678).
 **Here is a growing list of [features](https://github.com/millennialmedia/intellibot/wiki/Features).**
