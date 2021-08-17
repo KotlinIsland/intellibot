@@ -343,8 +343,9 @@ public class RobotLexer extends LexerBase {
         // potential start of variable
         if (isVariableStart(position)) {
             position += 2;
-            if (isNumber(position))
-                return false;
+            // move number judgement in ResolveUtils
+            // if (isNumber(position))
+            //    return false;
             int count = 1;
             while (count > 0 && position < this.endOffset && position >= 0) {
                 if (isVariableEnd(position)) {
