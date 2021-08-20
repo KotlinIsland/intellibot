@@ -74,7 +74,7 @@ public class HeadingImpl extends RobotPsiElementBase implements Heading {
     public boolean containsTestCases() {
         // TODO: better OO
         String text = getPresentableText();
-        return text.startsWith("*** Test Case");
+        return text.matches("^\\*\\*\\* (Test Case|Task).*");
     }
 
     @Override
