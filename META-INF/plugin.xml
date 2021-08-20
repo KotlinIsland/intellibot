@@ -1,8 +1,8 @@
-<idea-plugin version="2">
+<idea-plugin>
     <id>com.millennialmedia.intellibot@lte2000</id>
     <name>IntelliBot #patched</name>
     <version>0.10.143.398</version>
-    <vendor email="intellibot@millennialmedia.com" url="http://www.millennialmedia.com">Millennial Media</vendor>
+    <vendor url="https://plugins.jetbrains.com/plugin/17424-intellibot-patched">Millennial Media</vendor>
 
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true">com.intellij.modules.python</depends>
@@ -16,20 +16,18 @@
     <description><![CDATA[
       <h1>IntelliBot, Robot Framework Support</h1>
       <p>The IntelliBot plugin for IntelliJ/Pycharm adds smart editing features to support the <a href="http://robotframework.org/">Robot Framework</a>.</p>
-      <p>Make sure to <a href="https://github.com/millennialmedia/intellibot/wiki/Python-Interpreter">setup your IDE correctly</a> to gain Python support.</p>
-      <p>Find us in <a href="https://github.com/millennialmedia/intellibot">Github</a>.</p>
+      <p>Find more details at <a href="https://plugins.jetbrains.com/plugin/17424-intellibot-patched">Marketplace</a> or <a href="https://github.com/lte2000/intellibot">Github</a>.</p>
+      <br>
+      <p>Make sure to <a href="https://github.com/mtrubs/intellibot/wiki/Python-Interpreter">setup your IDE correctly</a> to gain Python support.</p>
+      <p>Forked from <a href="https://github.com/mtrubs/intellibot">Intellibot</a>:</p>
       <ul>
-        <li><a href="https://github.com/millennialmedia/intellibot/wiki/Features">Feature Set</a></li>
-        <li><a href="https://github.com/millennialmedia/intellibot/wiki">Wiki</a></li>
-        <li><a href="https://github.com/millennialmedia/intellibot/issues">Issue tracker</a></li>
-        <li><a href="https://github.com/millennialmedia/intellibot/wiki/Change-Notes">Complete Change Notes</a>
+        <li><a href="https://github.com/mtrubs/intellibot/wiki/Features">Feature Set</a></li>
+        <li><a href="https://github.com/mtrubs/intellibot/wiki">Wiki</a></li>
       </ul>
       ]]></description>
 
     <change-notes><![CDATA[
-      This is a temp patched IntelliBot (as the original plugin is not updated by the originator).<br>
-      Find it in <a href="https://github.com/lte2000/intellibot">Github</a>.<br>
-      See <a href="https://github.com/lte2000/intellibot#readme">what is fixed/enhanced/new added</a>.
+      based on IntelliBot, see <a href="https://github.com/lte2000/intellibot#readme">What is fixed, enhanced and new added</a>.<br>
       ]]>
     </change-notes>
 
