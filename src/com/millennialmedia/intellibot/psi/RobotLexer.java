@@ -96,6 +96,8 @@ public class RobotLexer extends LexerBase {
         return isWhitespace(position) || isNewLine(position) || isComment(position);
     }
 
+    private static final Pattern HEAD_PATTERN = Pattern.compile("\\*{3}.*\\*{3}");
+
     @Override
     public void advance() {
         if (this.position >= this.endOffset) {
@@ -137,6 +139,8 @@ public class RobotLexer extends LexerBase {
             this.position++;
             return;
         } else if (isHeading(this.position)) {
+            int ori_position = position;
+            boolean should_return = true;
             goToEndOfLine();
             String line = getCurrentSequence();
             this.currentToken = RobotTokenTypes.HEADING;
@@ -152,10 +156,15 @@ public class RobotLexer extends LexerBase {
             } else if (isVariables(line)) {
                 this.level.clear();
                 this.level.push(VARIABLES_HEADING);
-            } else {
+            } else if (HEAD_PATTERN.matcher(line).matches()){
                 this.currentToken = RobotTokenTypes.ERROR;
+            } else {
+                should_return = false;
+                this.position = ori_position;
             }
-            return;
+            if (should_return) {
+                return;
+            }
         }
 
         // the rest is based on state
@@ -408,7 +417,8 @@ public class RobotLexer extends LexerBase {
         return charAtEquals(position, '*') &&
                 charAtEquals(position + 1, '*') &&
                 charAtEquals(position + 2, '*') &&
-                isSpace(position + 3);
+                isSpace(position + 3) &&
+                (position <= 0 || charAtEquals(position - 1, '\n') || (position >=2 && charAtEquals(position - 1, ' ') && charAtEquals(position - 2, '\n')));
     }
 
     private boolean isEllipsis(int position) {

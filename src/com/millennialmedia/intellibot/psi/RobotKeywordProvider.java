@@ -65,7 +65,7 @@ public class RobotKeywordProvider {
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.SETTING, "Metadata");
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.SETTING, "Force Tags");
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.SETTING, "Default Tags");
-        KEYWORD_TABLE.addSyntax(RobotTokenTypes.SETTING, "Test Timeout");
+        // KEYWORD_TABLE.addSyntax(RobotTokenTypes.SETTING, "Test Timeout");
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.SETTING, "Setup");
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.SETTING, "Precondition");
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.SETTING, "Teardown");
