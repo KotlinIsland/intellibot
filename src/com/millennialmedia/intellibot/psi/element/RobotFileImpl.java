@@ -219,11 +219,10 @@ public class RobotFileImpl extends PsiFileBase implements RobotFile, KeywordFile
             PsiElement tmp = null;
             // optimized here: all variable.getVariable(getProject()) return same object,
             // so now only call variable.getVariable(getProject()) only once
+            // move the optimization to ReservedVariableScope.java as the implementation of getVariable may be changed.
             PsiElement pythonVariable = null;
             for (ReservedVariable variable : ReservedVariable.values()) {
-                if (pythonVariable == null) {
-                    pythonVariable = variable.getVariable(getProject());
-                }
+                pythonVariable = variable.getVariable(getProject());
                 if (pythonVariable != null) {
                     // already formatted ${X}
                     results.add(new VariableDto(pythonVariable, variable.getVariable(), variable.getScope()));

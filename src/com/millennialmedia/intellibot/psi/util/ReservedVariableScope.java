@@ -21,6 +21,12 @@ public enum ReservedVariableScope {
             // everywhere
             return true;
         }
+
+        @Nullable
+        @Override
+        public PsiElement getVariable(@NotNull Project project) {
+            return getGlobalVariable(project);
+        }
     },
     TestCase {
         @Override
@@ -214,16 +220,46 @@ public enum ReservedVariableScope {
                 PsiTreeUtil.getParentOfType(position, KeywordStatement.class);
     }
 
+    private static PsiElement GlobalVariableClass = null;
+    private static PsiElement ContextVariableClass = null;
+
     @Nullable
     public PsiElement getVariable(@NotNull Project project) {
+        return getContextVariable(project);
+    }
+
+    @Nullable
+    protected PsiElement getGlobalVariable(@NotNull Project project) {
+        if (GlobalVariableClass != null) {
+            return GlobalVariableClass;
+        }
         // Robot 2.x
         PsiElement element = PythonResolver.findVariable("GLOBAL_VARIABLES", project);
         if (element == null) {
             // Robot 3.x
             element = PythonResolver.findClass("GlobalVariables", project);
-            // element = PythonResolver.findClass("robot.variables.scopes.GlobalVariables", project);
         }
-        return element;
+        if (element == null) {
+            element = PythonResolver.findClass("robot.variables.scopes.GlobalVariables", project);
+        }
+        GlobalVariableClass = element;
+        return GlobalVariableClass;
+    }
+
+    @Nullable
+    protected PsiElement getContextVariable(@NotNull Project project) {
+        if (ContextVariableClass != null) {
+            return ContextVariableClass;
+        }
+        PsiElement element = PythonResolver.findClass("ExecutionContexts", project);
+        if (element == null) {
+            element = PythonResolver.findClass("robot.running.context.ExecutionContexts", project);
+        }
+        if (element == null) {
+            element = getGlobalVariable(project);
+        }
+        ContextVariableClass = element;
+        return ContextVariableClass;
     }
 
     public abstract boolean isInScope(@NotNull PsiElement position);
