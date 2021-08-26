@@ -27,7 +27,17 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      based on IntelliBot, see <a href="https://github.com/lte2000/intellibot#readme">What is fixed, enhanced and new added</a>.<br>
+      based on IntelliBot, See overall <a href="https://github.com/lte2000/intellibot#readme">What is fixed, enhanced and new added</a>.<br>
+      <br>
+      In this release:
+      <ul>
+        <li>support <b>Tasks</b> test data section</li>
+        <li>optimize code inspections</li>
+        <li>support line continuation "..." in old syntax FOR loop body which begin with "\"</li>
+        <li>handle variable name started with digit correctly</li>
+        <li>same relative physical resource/library pathname now will be resolved to different file for robot files in different directory</li>
+        <li>search resource/library using relative physical path in directory relative to every project Content Root if it is not found in the directory relative to the robot file</li>
+      </ul>
       ]]>
     </change-notes>
 

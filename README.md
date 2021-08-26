@@ -21,6 +21,8 @@ This version of intellibot provide more options, see following picture:
 
 * Support FOR loop, both old and new syntax
 
+* Support Tasks test data section
+
 * Variable
   * support variable in extended syntax, e.g. ${var * 10 + 3}
   * support scalar/dictionary/list variable resolve
@@ -43,7 +45,8 @@ This version of intellibot provide more options, see following picture:
   * replace variable in library path with user defined value
     * e.g. if provide "${EXECDIR}=/repo/test/execution" in options, "Resource ${EXECDIR}/file1.robot" will search "/repo/test/execution/file1.robot"
     * it is useful if there're runtime variables in import path
-    * can work with the option "strip variable in library path" together, and variable replacement will do first.
+    * can work with the option "strip variable in library path" together, and variable replacement will do first
+  * for resource/library using relative physical path, if not found in path relative to the robot file, will search it in path relative to every project Content Root
 
 * Correct the import behavior for Library, Resource and Variables files.
   * import both variable and keyword from Resource.
@@ -60,7 +63,7 @@ This version of intellibot provide more options, see following picture:
 
 * Autocompletion
   * keyword autocompletion support input prefixed with library and resource name
-  * insert 4 spaces after keyword
+  * insert 4 spaces after keyword if it accept argument
   * if type 2 spaces, expand to 4 spaces according to surrounding space count
 
 * resolve exception:
