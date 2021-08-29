@@ -45,8 +45,8 @@ public class RobotVariableNotFound extends SimpleRobotInspection {
                 container = container.getParent();
             }
             if (container instanceof KeywordStatement) {
-                KeywordInvokable invokable = ((KeywordStatement) container).getInvokable();
-                String text = invokable == null ? null : invokable.getPresentableText();
+//                KeywordInvokable invokable = ((KeywordStatement) container).getInvokable();
+//                String text = invokable == null ? null : invokable.getPresentableText();
 //                if (text != null) {
 //                    if (text.startsWith(":")) {
 //                        // TODO: for loops

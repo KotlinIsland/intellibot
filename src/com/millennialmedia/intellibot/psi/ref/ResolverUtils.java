@@ -55,6 +55,8 @@ public class ResolverUtils {
     }
 
     private static final Pattern VARIABLE_BASENAME = Pattern.compile("([\\$\\@\\%\\&]\\{[a-zA-Z0-9 _]+)[^a-zA-Z0-9 _}].*");
+    private static final Pattern VARIABLE_IS_NUMBER = Pattern.compile("\\$\\{[-+]?[0-9.]+\\b.*");
+
     @Nullable
     public static PsiElement resolveVariableFromFile(@Nullable String variableText, @Nullable PsiFile file) {
         if (variableText == null) {
@@ -142,6 +144,10 @@ public class ResolverUtils {
                     return variable.reference();
                 }
             }
+        }
+        if (VARIABLE_IS_NUMBER.matcher(variableText).matches()) {
+            // just return something, for number it don't need resolving
+            return parent;
         }
         return null;
     }

@@ -2,6 +2,7 @@ package com.millennialmedia.intellibot.psi.ref;
 
 import com.intellij.notification.*;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -51,14 +52,14 @@ public class RobotFileManager {
         if (resource == null) {
             return null;
         }
-        PsiElement result = getFromCache(resource, project);
-        if (result != null) {
-            return result;
-        }
+//        PsiElement result = getFromCache(resource, project);
+//        if (result != null) {
+//            return result;
+//        }
         String[] file = getFilename(resource, "", project);
         debug(resource, "Attempting global robot search", project);
-        result = findGlobalFile(resource, file[0], file[1], project, originalElement);
-        addToCache(result, resource);
+        PsiElement result = findGlobalFile(resource, file[0], file[1], project, originalElement);
+//        addToCache(result, resource);
         return result;
     }
 
@@ -68,17 +69,22 @@ public class RobotFileManager {
         if (library == null) {
             return null;
         }
-        PsiElement result = getFromCache(library, project);
-        if (result != null) {
-            return result;
-        }
+        PsiElement result;
+//        PsiElement result = getFromCache(library, project);
+//        if (result != null) {
+//            return result;
+//        }
         // robotframework
         // Using library name
         //     The most common way to specify a test library to import is using its name,
         //     like it has been done in all the examples in this section. In these cases
         //     Robot Framework tries to find the class or module implementing the library
         //     from the module search path.
-        if (! library.contains("/")) {
+        if (! library.contains("/") && ! library.endsWith(".py")) {
+            result = getFromCache(library, project);
+            if (result != null) {
+                return result;
+            }
             debug(library, "Attempting class search", project);
             result = PythonResolver.findClass(library, project, false);
             if (result != null) {
@@ -126,14 +132,14 @@ public class RobotFileManager {
             debug(library, "Attempting project directory search", project);
             result = findProjectDirectory(library, file[0], file[1], project, originalElement);
             if (result != null) {
-                addToCache(result, library);
+//                addToCache(result, library);
                 return result;
             }
             // search global scope... this can get messy
             debug(library, "Attempting global directory search", project);
             result = findGlobalDirectory(library, file[0], file[1], project, originalElement);
             if (result != null) {
-                addToCache(result, library);
+//                addToCache(result, library);
                 return result;
             }
         } else {
@@ -141,14 +147,14 @@ public class RobotFileManager {
             debug(library, "Attempting project file search", project);
             result = findProjectFile(library, file[0], file[1], project, originalElement);
             if (result != null) {
-                addToCache(result, library);
+//                addToCache(result, library);
                 return result;
             }
             // search global scope... this can get messy
             debug(library, "Attempting global file search", project);
             result = findGlobalFile(library, file[0], file[1], project, originalElement);
             if (result != null) {
-                addToCache(result, library);
+//                addToCache(result, library);
                 return result;
             }
         }
@@ -186,29 +192,77 @@ public class RobotFileManager {
         debug(original, "path::" + path, project);
         debug(original, (directory ? "directory::" : "file::") + fileName, project);
 
-        if (path.contains("./")) {
+        if (! isAbsolutePath(path)) {
             // contains a relative path
             VirtualFile workingDir = originalElement.getContainingFile().getVirtualFile().getParent();
-            VirtualFile relativePath = workingDir.findFileByRelativePath(path);
-            if (relativePath != null && relativePath.isDirectory() && relativePath.getCanonicalPath() != null) {
-                debug(original, "changing relative path to: " + relativePath.getCanonicalPath(), project);
-                path = relativePath.getCanonicalPath();
-                if (!path.endsWith("/")) {
-                    path += "/";
+            PsiFile psiFile = findFileInRelativePath(workingDir, original, path, fileName, project, search, originalElement, directory);
+            if (psiFile != null) {
+                return psiFile;
+            }
+            VirtualFile[] contentRoots = ProjectRootManager.getInstance(project).getContentRoots();
+            for (VirtualFile contentRoot : contentRoots) {
+                psiFile = findFileInRelativePath(contentRoot, original, path, fileName, project, search, originalElement, directory);
+                if (psiFile != null) {
+                    return psiFile;
                 }
             }
+            debug(original, "can't found", project);
+            return null;
         }
-        path = path + fileName;
 
+        String fullName = path + fileName;
+        PsiElement result = getFromCache(fullName, project);
+        if (result instanceof PsiFile) {
+            return (PsiFile) result;
+        }
+        PsiFile psiFile = getMatchedFile(original, fullName, fileName, project, search, originalElement, directory);
+        if (psiFile != null) {
+            addToCache(psiFile, fullName);
+            return psiFile;
+        }
+
+        debug(original, "can't found", project);
+        return null;
+    }
+
+    @Nullable
+    private static PsiFile findFileInRelativePath(@NotNull VirtualFile baseDir, @NotNull String original, @NotNull String path, @NotNull String fileName,
+                                    @NotNull Project project, @NotNull GlobalSearchScope search,
+                                    @NotNull PsiElement originalElement, boolean directory) {
+        VirtualFile relativePath = baseDir.findFileByRelativePath(path);
+        if (relativePath != null && relativePath.isDirectory() && relativePath.getCanonicalPath() != null) {
+            String newpath = relativePath.getCanonicalPath();
+            debug(original, "changing relative path to: " + newpath, project);
+            String fullName = newpath + "/" + fileName;
+            PsiElement result = getFromCache(fullName, project);
+            if (result instanceof PsiFile) {
+                return (PsiFile) result;
+            }
+            PsiFile psiFile = getMatchedFile(original, fullName, fileName, project, search, originalElement, directory);
+            if (psiFile != null) {
+                addToCache(psiFile, fullName);
+                return psiFile;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private static PsiFile getMatchedFile(@NotNull String original, @NotNull String fullName, @NotNull String fileName,
+                                    @NotNull Project project, @NotNull GlobalSearchScope search,
+                                    @NotNull PsiElement originalElement, boolean directory) {
         Collection<VirtualFile> files = FilenameIndex.getVirtualFilesByName(project, fileName, search);
         debug(original, "matching: " + collectionToString(files), project);
+        if (! isAbsolutePath(fullName)) {
+            fullName = "/" + fullName;
+        }
         for (VirtualFile file : files) {
             String tryPath = file.getCanonicalPath();
             if (tryPath == null)
                 continue;
             debug(original, "trying: " + tryPath, project);
             // TODO: if path is abosute path startsWith "/", endsWith comparision may return true if tryPath have prefix
-            if (tryPath.endsWith(path) &&
+            if (tryPath.endsWith(fullName) &&
                     ((directory && file.isDirectory()) || (!directory && !file.isDirectory()))) {
                 VirtualFile targetFound = file;
                 if (directory) {
@@ -283,8 +337,8 @@ public class RobotFileManager {
         pathElements[pathElements.length - 1] = "";
         results[0] = String.join("/", pathElements);
         // absolute or relative path
-        if (! results[0].matches("([a-zA-Z]:)?/.*|.*([$%]\\{.+}).*") && ! results[0].contains("./"))
-            results[0] = "./" + results[0];
+//        if (! results[0].matches("([a-zA-Z]:)?/.*|.*([$%]\\{.+}).*") && ! results[0].contains("./"))
+//            results[0] = "./" + results[0];
         if (RobotOptionsProvider.getInstance(project).stripVariableInLibraryPath()) {
             results[0] = results[0].replaceAll("[$%]\\{|}", "");
         }
@@ -293,6 +347,10 @@ public class RobotFileManager {
         }
         results[1] = result;
         return results;
+    }
+
+    private static boolean isAbsolutePath(String path) {
+        return path.matches("([a-zA-Z]:)?/.*");
     }
 
     private static void debug(@NotNull String lookup, String data, @NotNull Project project) {

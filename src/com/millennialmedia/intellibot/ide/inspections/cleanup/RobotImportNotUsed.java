@@ -29,15 +29,12 @@ public class RobotImportNotUsed extends SimpleRobotInspection {
 
     @Override
     public boolean skip(PsiElement element) {
-        if (element.getNode().getElementType() != RobotTokenTypes.ARGUMENT) {
-            return true;
-        } else if (!(element instanceof Argument)) {
+        if (!(element instanceof Argument)) {
             return true;
         }
-        PsiFile file = element.getContainingFile();
-        if (!(file instanceof RobotFile)) {
-            return true;
-        }
+//        else if (element.getNode().getElementType() != RobotTokenTypes.ARGUMENT) {
+//            return true;
+//        }
 
         PsiElement parent = element.getParent();
 
@@ -58,7 +55,11 @@ public class RobotImportNotUsed extends SimpleRobotInspection {
                 if (importFile == null) {
                     return true; // we cannot find the file thus we do not know if we use it
                 }
-                
+
+                PsiFile file = element.getContainingFile();
+                if (!(file instanceof RobotFile)) {
+                    return true;
+                }
                 Collection<PsiFile> referenced = ((RobotFile) file).getFilesFromInvokedKeywordsAndVariables();
                 return referenced.contains(importFile.getContainingFile());
             } else {

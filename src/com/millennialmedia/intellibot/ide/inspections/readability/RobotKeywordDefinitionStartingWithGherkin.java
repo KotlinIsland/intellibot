@@ -17,6 +17,12 @@ import java.util.Collection;
  */
 public class RobotKeywordDefinitionStartingWithGherkin extends SimpleRobotInspection {
 
+    private static final Collection<String> gherkin;
+
+    static {
+        gherkin = RobotKeywordProvider.getInstance().getSyntaxOfType(RobotTokenTypes.GHERKIN);
+    }
+
     @Nls
     @NotNull
     @Override
@@ -30,16 +36,12 @@ public class RobotKeywordDefinitionStartingWithGherkin extends SimpleRobotInspec
     }
 
     private boolean valid(String text) {
-        Collection<String> gherkin = RobotKeywordProvider.getInstance().getSyntaxOfType(RobotTokenTypes.GHERKIN);
+//        Collection<String> gherkin = RobotKeywordProvider.getInstance().getSyntaxOfType(RobotTokenTypes.GHERKIN);
         int firstSpace = text.indexOf(" ");
-
-        String word;
-        if (firstSpace < 0) {
-            word = text;
-        } else {
-            word = text.substring(0, firstSpace);
+        if (firstSpace >= 0) {
+            text = text.substring(0, firstSpace);
         }
-        return !gherkin.contains(word);
+        return !gherkin.contains(text);
     }
 
     @Override

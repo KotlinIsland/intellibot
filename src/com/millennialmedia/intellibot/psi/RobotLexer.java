@@ -43,7 +43,7 @@ public class RobotLexer extends LexerBase {
     }
 
     private static boolean isTestCases(String line) {
-        return "*** Test Cases ***".equals(line) || "*** Test Case ***".equals(line);
+        return line.matches("\\*\\*\\* (Test Cases?|Tasks?) \\*\\*\\*");
     }
 
     private static boolean isKeywords(String line) {
@@ -343,8 +343,9 @@ public class RobotLexer extends LexerBase {
         // potential start of variable
         if (isVariableStart(position)) {
             position += 2;
-            if (isNumber(position))
-                return false;
+            // move number judgement in ResolveUtils
+            // if (isNumber(position))
+            //    return false;
             int count = 1;
             while (count > 0 && position < this.endOffset && position >= 0) {
                 if (isVariableEnd(position)) {
@@ -414,6 +415,18 @@ public class RobotLexer extends LexerBase {
         while (position < this.endOffset && (isWhitespace(position) || isNewLine(position))) {
             position++;
         }
+        // support "..." in FOR loop body that begin with "\"
+        //TODO: should there be superspace before "\"?
+        if (isBackslash(position)) {
+            position++;
+            // between "\" and "...", at least one superspace
+            if (!isSuperSpace(position)) {
+                return false;
+            }
+            while (position < this.endOffset && (isWhitespace(position) || isNewLine(position))) {
+                position++;
+            }
+        }
         return charAtEquals(position, '.') &&
                 charAtEquals(position + 1, '.') &&
                 charAtEquals(position + 2, '.') &&
@@ -421,11 +434,19 @@ public class RobotLexer extends LexerBase {
     }
 
     private boolean isOnlyWhitespaceToPreviousLine(int position) {
-        // TODO: "..." in FOR loop body that begin with "\"
+        // support "..." in FOR loop body that begin with "\"
+        boolean have_backslash = false;
         while (position >= 0 && !isNewLine(position)) {
-            if (!isWhitespace(position)) {
+            if (!isWhitespace(position) && !isBackslash((position))) {
                 return false;
             }
+            if (isBackslash(position)) {
+                if (have_backslash || !isSuperSpace(position+1)) {
+                    return false;
+                }
+                have_backslash = true;
+            }
+            //TODO: should there be superspace before "\"?
             position--;
         }
         return true;
@@ -563,5 +584,9 @@ public class RobotLexer extends LexerBase {
             this.position = p;
             return false;
         }
+    }
+
+    private boolean isBackslash(int position) {
+        return position < this.endOffset && this.buffer.charAt(position) == '\\';
     }
 }

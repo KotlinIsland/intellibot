@@ -24,10 +24,11 @@ public class RobotKeywordReference extends PsiReferenceBase<KeywordInvokable> {
         String keyword = element.getPresentableText();
         // all files we import are based off the file we are currently in
         // TODO: potentially unsafe cast
-        PerformanceCollector debug = new PerformanceCollector((PerformanceEntity) element, "resolve");
-        PsiElement results = ResolverUtils.resolveKeywordFromFile(keyword, element.getContainingFile());
-        debug.complete();
-        return results;
+//        PerformanceCollector debug = new PerformanceCollector((PerformanceEntity) element, "resolve");
+//        PsiElement results = ResolverUtils.resolveKeywordFromFile(keyword, element.getContainingFile());
+//        debug.complete();
+//        return results;
+        return ResolverUtils.resolveKeywordFromFile(keyword, element.getContainingFile());
     }
 
     @NotNull

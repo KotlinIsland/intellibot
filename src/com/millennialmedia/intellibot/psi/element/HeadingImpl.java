@@ -74,7 +74,7 @@ public class HeadingImpl extends RobotPsiElementBase implements Heading {
     public boolean containsTestCases() {
         // TODO: better OO
         String text = getPresentableText();
-        return text.startsWith("*** Test Case");
+        return text.matches("^\\*\\*\\* (Test Case|Task).*");
     }
 
     @Override
@@ -417,6 +417,12 @@ public class HeadingImpl extends RobotPsiElementBase implements Heading {
                                 toBeAdded = true;
                                 break;
                             }
+                        } else if (file instanceof RobotPythonFile) {
+                            if (((RobotPythonFile) file).getOriginalLibrary().equals(name)) {
+                                withName = ((RobotPythonFile) file).getLibrary();
+                                toBeAdded = true;
+                                break;
+                            }
                         }
                     }
                 }
@@ -490,6 +496,14 @@ public class HeadingImpl extends RobotPsiElementBase implements Heading {
         String results = originalNameSpace;
         if (index > 0 && index + 1 < args.length) {
             results = args[index + 1].getPresentableText();
+        }
+        // after library path string replacement implemented, the file name may be changed
+        // for my owner patch, with setting Selenium2Library=SeleniumLibrary
+        else if (args.length >= 1 && originalNameSpace.equals("SeleniumLibrary")) {
+            String oresult = args[0].getPresentableText();
+            if (! oresult.contains(originalNameSpace)) {
+                results = oresult.replaceAll("^.*/|\\.py$", "");
+            }
         }
         return results;
     }
