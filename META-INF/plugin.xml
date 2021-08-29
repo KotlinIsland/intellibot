@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.millennialmedia.intellibot@lte2000</id>
     <name>IntelliBot #patched</name>
-    <version>0.10.143.398.1</version>
+    <version>0.11.191.8026</version>
     <vendor url="https://plugins.jetbrains.com/plugin/17424-intellibot-patched">Millennial Media</vendor>
 
     <depends>com.intellij.modules.lang</depends>
@@ -31,7 +31,10 @@
       <br>
       In this release:
       <ul>
-        <li>search order of relative physical resource/library path: robot file, project source root, project content root</li>
+        <li>search order of relative physical resource/library path: relative to current robot file, then project source root, then project content root</li>
+        <li>code completion: filter candidate based on table cell</li>
+        <li>code completion: remove underscore in some built-in variables according to RF user guide</li>
+        <li>code completion: avoid extra asterisks for table head</li>
       </ul>
       ]]>
     </change-notes>
