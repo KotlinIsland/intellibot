@@ -1,8 +1,14 @@
 ## IntelliJ/PyCharm Plugin for Robot Automation Framework
 
+![screenshot](/wiki/features/demo_complete2.png)
+
 **INSTALLATION**  
-Download the [intellibot.jar](/intellibot.jar) file in this github project.  
-Then install this plugin to your IDE by using the 'Install plugin from disk...' option.
+The plugin is now published in the [JetBrains Plugins Repository](https://plugins.jetbrains.com/plugin/17424-intellibot-patched/).
+You can install it directly from your IDE.  
+Just search for '**IntelliBot #patched**' under 'Marketplace...' in Settings/Preferences [Plugin Manager](https://www.jetbrains.com/help/idea/managing-plugins.html) UI in IntelliJ Platform-based IDEs.
+
+You can also manually download the [intellibot.jar](/intellibot.jar) file from github.  
+Then install this plugin in IDE by using the 'Install plugin from disk...' option.
 
 **NEW OPTIONS**  
 This version of intellibot provide more options, see following picture:
@@ -75,7 +81,7 @@ Related feature request to JetBrains: [IDEA-97678](http://youtrack.jetbrains.com
 
 Note that this plugin should work in either IntelliJ or PyCharm, but that PyCharm is far less used (and thus tested) personally.
 
-**The plugin is now hosted in the JetBrains [repositories](http://plugins.jetbrains.com/plugin/7386?pr=github).**
+**The plugin is now hosted in the JetBrains [repositories](https://plugins.jetbrains.com/plugin/17424-intellibot-patched).**
 This means you can install it directly form your IDE.
 Just search for 'Intellibot' under 'Browse Repositories...'.
 
