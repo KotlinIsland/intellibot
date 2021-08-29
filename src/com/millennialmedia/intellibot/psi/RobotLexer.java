@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Stack;
+import java.util.regex.Pattern;
 
 public class RobotLexer extends LexerBase {
 
@@ -192,10 +193,15 @@ public class RobotLexer extends LexerBase {
                 if (isSuperSpace(this.position)) {
                     skipWhitespace();
                 }
-                goToVariableEnd();
-                //goToNextNewLineOrSuperSpace();
-                this.level.push(VARIABLE_DEFINITION);
-                this.currentToken = RobotTokenTypes.VARIABLE_DEFINITION;
+                if (isVariable(this.position)) {
+                    goToVariableEnd();
+                    //goToNextNewLineOrSuperSpace();
+                    this.level.push(VARIABLE_DEFINITION);
+                    this.currentToken = RobotTokenTypes.VARIABLE_DEFINITION;
+                } else {
+                    goToEndOfLine();
+                    this.currentToken = RobotTokenTypes.ERROR;
+                }
             } else if (TEST_CASES_HEADING == state || KEYWORDS_HEADING == state) {
                 if (isSuperSpace(this.position)) {
                     skipWhitespace();
@@ -213,6 +219,8 @@ public class RobotLexer extends LexerBase {
             } else if (KEYWORD_DEFINITION == state) {
                 if (isSuperSpace(this.position)) {
                     skipWhitespace();
+                    this.currentToken = RobotTokenTypes.WHITESPACE;
+                } else if (lookAheadForLoop()) {
                     this.currentToken = RobotTokenTypes.WHITESPACE;
                 } else if (isVariable(this.position)) {
                     goToVariableEnd();
@@ -335,6 +343,8 @@ public class RobotLexer extends LexerBase {
         // potential start of variable
         if (isVariableStart(position)) {
             position += 2;
+            if (isNumber(position))
+                return false;
             int count = 1;
             while (count > 0 && position < this.endOffset && position >= 0) {
                 if (isVariableEnd(position)) {
@@ -373,7 +383,8 @@ public class RobotLexer extends LexerBase {
     private boolean isVariableStart(int position) {
         return (charAtEquals(position, '$') ||
                 charAtEquals(position, '@') ||
-                charAtEquals(position, '%')) && charAtEquals(position + 1, '{');
+                charAtEquals(position, '%') ||
+                charAtEquals(position, '&')) && charAtEquals(position + 1, '{');
     }
 
     private boolean isVariableEnd(int position) {
@@ -410,6 +421,7 @@ public class RobotLexer extends LexerBase {
     }
 
     private boolean isOnlyWhitespaceToPreviousLine(int position) {
+        // TODO: "..." in FOR loop body that begin with "\"
         while (position >= 0 && !isNewLine(position)) {
             if (!isWhitespace(position)) {
                 return false;
@@ -535,5 +547,21 @@ public class RobotLexer extends LexerBase {
 
     private boolean isWhitespace(int position) {
         return position < this.endOffset && !isNewLine(position) && Character.isWhitespace(this.buffer.charAt(position));
+    }
+
+    private boolean isNumber(int position) {
+        return position < this.endOffset && (Character.isDigit(this.buffer.charAt(position)) || this.buffer.charAt(position) == '-');
+    }
+
+    private static final Pattern FOR_PATTERN = Pattern.compile("(?:: ?)?FOR|\\\\|END");
+    private boolean lookAheadForLoop() {
+        int p = this.position;
+        goToNextNewLineOrSuperSpace();
+        if (FOR_PATTERN.matcher(this.buffer.subSequence(this.startOffset, this.position)).matches()) {
+            return true;
+        } else {
+            this.position = p;
+            return false;
+        }
     }
 }

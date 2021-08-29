@@ -5,16 +5,19 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.ProjectScope;
-import com.intellij.util.containers.MultiMap;
+import com.jetbrains.python.psi.PyFile;
+import com.jetbrains.python.psi.stubs.PyModuleNameIndex;
 import com.millennialmedia.intellibot.ide.config.RobotOptionsProvider;
+import com.millennialmedia.intellibot.psi.RobotProjectData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,41 +27,21 @@ import java.util.Map;
  * @since 2014-06-28
  */
 public class RobotFileManager {
-
-    private static final Map<String, PsiElement> FILE_CACHE = new HashMap<String, PsiElement>();
-    private static final MultiMap<PsiElement, String> FILE_NAMES = MultiMap.createSet();
+//    put CACHE into RobotProjectData, avoid project disposed exception when switch between project
+//    private static final Map<String, PsiElement> FILE_CACHE = new HashMap<String, PsiElement>();
+//    private static final MultiMap<PsiElement, String> FILE_NAMES = MultiMap.createSet();
 
     private RobotFileManager() {
-        NotificationsConfiguration.getNotificationsConfiguration().register(
-                "intellibot.debug", NotificationDisplayType.NONE);
     }
 
     @Nullable
-    private static synchronized PsiElement getFromCache(@NotNull String value) {
-        PsiElement element = FILE_CACHE.get(value);
-        // evict the element if it is from an old instance
-        if (element != null && element.getProject().isDisposed()) {
-            evict(element);
-            return null;
-        }
-        return element;
+    private static PsiElement getFromCache(@NotNull String value, @NotNull Project project) {
+        return RobotProjectData.getInstance(project).getFromCache(value);
     }
 
-    private static synchronized void addToCache(@Nullable PsiElement element, @NotNull String value) {
-        if (element != null && !element.getProject().isDisposed()) {
-            FILE_CACHE.put(value, element);
-            FILE_NAMES.putValue(element, value);
-        }
-    }
-
-    public static synchronized void evict(@Nullable PsiElement element) {
+    private static void addToCache(@Nullable PsiElement element, @NotNull String value) {
         if (element != null) {
-            Collection<String> keys = FILE_NAMES.remove(element);
-            if (keys != null) {
-                for (String key : keys) {
-                    FILE_CACHE.remove(key);
-                }
-            }
+            RobotProjectData.getInstance(element.getProject()).addToCache(element, value);
         }
     }
 
@@ -68,12 +51,12 @@ public class RobotFileManager {
         if (resource == null) {
             return null;
         }
-        PsiElement result = getFromCache(resource);
+        PsiElement result = getFromCache(resource, project);
         if (result != null) {
             return result;
         }
-        String[] file = getFilename(resource, "");
-        debug(resource, "Attempting global search", project);
+        String[] file = getFilename(resource, "", project);
+        debug(resource, "Attempting global robot search", project);
         result = findGlobalFile(resource, file[0], file[1], project, originalElement);
         addToCache(result, resource);
         return result;
@@ -85,35 +68,89 @@ public class RobotFileManager {
         if (library == null) {
             return null;
         }
-        PsiElement result = getFromCache(library);
+        PsiElement result = getFromCache(library, project);
         if (result != null) {
             return result;
         }
-        debug(library, "Attempting class search", project);
-        result = PythonResolver.findClass(library, project);
-        if (result != null) {
-            addToCache(result, library);
-            return result;
+        // robotframework
+        // Using library name
+        //     The most common way to specify a test library to import is using its name,
+        //     like it has been done in all the examples in this section. In these cases
+        //     Robot Framework tries to find the class or module implementing the library
+        //     from the module search path.
+        if (! library.contains("/")) {
+            debug(library, "Attempting class search", project);
+            result = PythonResolver.findClass(library, project, false);
+            if (result != null) {
+                addToCache(result, library);
+                return result;
+            }
+            debug(library, "Attemping module search", project);
+            List<PyFile> results = PyModuleNameIndex.find(library, project, true);
+            if (! results.isEmpty()) {
+                result = (PsiFile)results.get(0);
+                addToCache(result, library);
+                return result;
+            }
         }
 
-        String mod = library.replace(".py", "").replaceAll("\\.", "\\/");
-        while (mod.contains("//")) {
-            mod = mod.replace("//", "/");
+        // robotframework
+        // Using physical path to library
+        //     Another mechanism for specifying the library to import is using a path to it
+        //     in the file system. This path is considered relative to the directory where
+        //     current test data file is situated similarly as paths to resource and variable
+        //     files.
+        //     If the library is a file, the path to it must contain extension. For Python
+        //     libraries the extension is naturally .py. If Python library is implemented as
+        //     a directory, the path to it must have a trailing forward slash (/) if the path
+        //     is relative. With absolute paths the trailing slash is optional.
+        //     A limitation of this approach is that libraries implemented as Python classes
+        //     must be in a module with the same name as the class.
+
+        boolean directory = true;
+        String mod = library;
+        if (library.endsWith(".py")) {
+            directory = false;
+            mod = mod.substring(0, mod.length()-3);
         }
-        String[] file = getFilename(mod, ".py");
-        // search project scope
-        debug(library, "Attempting project search", project);
-        result = findProjectFile(library, file[0], file[1], project, originalElement);
-        if (result != null) {
-            addToCache(result, library);
-            return result;
-        }
-        // search global scope... this can get messy
-        debug(library, "Attempting global search", project);
-        result = findGlobalFile(library, file[0], file[1], project, originalElement);
-        if (result != null) {
-            addToCache(result, library);
-            return result;
+        // if mod contain "/", then "." is most probably part of pathname, not to be replaced with "/"
+        if (! mod.contains("/"))
+            mod = mod.replaceAll("\\.", "/");
+        mod = mod.replaceAll("/{2,}", "/");
+        if (! directory)
+            mod += ".py";
+        String[] file = getFilename(mod, "", project);
+
+        if (directory) {
+            // search project scope
+            debug(library, "Attempting project directory search", project);
+            result = findProjectDirectory(library, file[0], file[1], project, originalElement);
+            if (result != null) {
+                addToCache(result, library);
+                return result;
+            }
+            // search global scope... this can get messy
+            debug(library, "Attempting global directory search", project);
+            result = findGlobalDirectory(library, file[0], file[1], project, originalElement);
+            if (result != null) {
+                addToCache(result, library);
+                return result;
+            }
+        } else {
+            // search project scope
+            debug(library, "Attempting project file search", project);
+            result = findProjectFile(library, file[0], file[1], project, originalElement);
+            if (result != null) {
+                addToCache(result, library);
+                return result;
+            }
+            // search global scope... this can get messy
+            debug(library, "Attempting global file search", project);
+            result = findGlobalFile(library, file[0], file[1], project, originalElement);
+            if (result != null) {
+                addToCache(result, library);
+                return result;
+            }
         }
         return null;
     }
@@ -121,21 +158,33 @@ public class RobotFileManager {
     @Nullable
     private static PsiFile findProjectFile(@NotNull String original, @NotNull String path, @NotNull String fileName,
                                            @NotNull Project project, @NotNull PsiElement originalElement) {
-        return findFile(original, path, fileName, project, ProjectScope.getContentScope(project), originalElement);
+        return findFile(original, path, fileName, project, ProjectScope.getContentScope(project), originalElement, false);
     }
 
     @Nullable
     private static PsiFile findGlobalFile(@NotNull String original, @NotNull String path, @NotNull String fileName,
                                           @NotNull Project project, @NotNull PsiElement originalElement) {
-        return findFile(original, path, fileName, project, GlobalSearchScope.allScope(project), originalElement);
+        return findFile(original, path, fileName, project, GlobalSearchScope.allScope(project), originalElement, false);
+    }
+
+    @Nullable
+    private static PsiFile findProjectDirectory(@NotNull String original, @NotNull String path, @NotNull String fileName,
+                                           @NotNull Project project, @NotNull PsiElement originalElement) {
+        return findFile(original, path, fileName, project, ProjectScope.getContentScope(project), originalElement, true);
+    }
+
+    @Nullable
+    private static PsiFile findGlobalDirectory(@NotNull String original, @NotNull String path, @NotNull String fileName,
+                                          @NotNull Project project, @NotNull PsiElement originalElement) {
+        return findFile(original, path, fileName, project, GlobalSearchScope.allScope(project), originalElement, true);
     }
 
     @Nullable
     private static PsiFile findFile(@NotNull String original, @NotNull String path, @NotNull String fileName,
                                     @NotNull Project project, @NotNull GlobalSearchScope search,
-                                    @NotNull PsiElement originalElement) {
+                                    @NotNull PsiElement originalElement, boolean directory) {
         debug(original, "path::" + path, project);
-        debug(original, "file::" + fileName, project);
+        debug(original, (directory ? "directory::" : "file::") + fileName, project);
 
         if (path.contains("./")) {
             // contains a relative path
@@ -149,18 +198,35 @@ public class RobotFileManager {
                 }
             }
         }
+        path = path + fileName;
 
-        PsiFile[] files = FilenameIndex.getFilesByName(project, fileName, search);
-        StringBuilder builder = new StringBuilder();
-        builder.append(path);
-        builder.append(fileName);
-        path = builder.reverse().toString();
-        debug(original, "matching: " + arrayToString(files), project);
-        for (PsiFile file : files) {
-            debug(original, "trying: " + file.getVirtualFile().getCanonicalPath(), project);
-            if (acceptablePath(path, file)) {
-                debug(original, "matched: " + file.getVirtualFile().getCanonicalPath(), project);
-                return file;
+        Collection<VirtualFile> files = FilenameIndex.getVirtualFilesByName(project, fileName, search);
+        debug(original, "matching: " + collectionToString(files), project);
+        for (VirtualFile file : files) {
+            String tryPath = file.getCanonicalPath();
+            if (tryPath == null)
+                continue;
+            debug(original, "trying: " + tryPath, project);
+            // TODO: if path is abosute path startsWith "/", endsWith comparision may return true if tryPath have prefix
+            if (tryPath.endsWith(path) &&
+                    ((directory && file.isDirectory()) || (!directory && !file.isDirectory()))) {
+                VirtualFile targetFound = file;
+                if (directory) {
+                    targetFound = null;
+                    for (VirtualFile sub : file.getChildren()) {
+                        if (sub.getName().equals("__init__.py") && !sub.isDirectory()) {
+                            targetFound = sub;
+                            break;
+                        }
+                    }
+                }
+                if (targetFound != null) {
+                    PsiFile psiFile = PsiManager.getInstance(project).findFile(targetFound);
+                    if (psiFile != null) {
+                        debug(original, "matched: " + targetFound.getCanonicalPath(), project);
+                        return psiFile;
+                    }
+                }
             }
         }
         debug(original, "no acceptable matches", project);
@@ -180,6 +246,19 @@ public class RobotFileManager {
         return builder.toString();
     }
 
+    private static String collectionToString(Collection<VirtualFile> files) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        if (files != null) {
+            for (VirtualFile file : files) {
+                builder.append(file.getCanonicalPath());
+                builder.append(";");
+            }
+        }
+        builder.append("]");
+        return builder.toString();
+    }
+
     private static boolean acceptablePath(@NotNull String path, @Nullable PsiFile file) {
         if (file == null) {
             return false;
@@ -188,23 +267,28 @@ public class RobotFileManager {
         if (virtualFilePath == null) {
             return false;
         }
-        String filePath = new StringBuilder(virtualFilePath).reverse().toString();
-        return filePath.startsWith(path);
+        return virtualFilePath.endsWith(path);
     }
 
     @NotNull
-    private static String[] getFilename(@NotNull String path, @NotNull String suffix) {
-        // support either / or ${/}
-        String[] pathElements = path.split("(\\$\\{)?/(\\})?");
-        String result;
-        if (pathElements.length == 0) {
-            result = path;
-        } else {
-            result = pathElements[pathElements.length - 1];
+    private static String[] getFilename(@NotNull String path, @NotNull String suffix, @NotNull Project project) {
+        for (Map.Entry<String, String> entry : RobotOptionsProvider.getInstance(project).getPredefinedVaraibleTable().entrySet()) {
+            path = path.replace(entry.getKey(), entry.getValue());
         }
+        // support either / or ${/}
+        String[] pathElements = path.split("(\\$\\{)?/(})?");
+        String result;
+        result = pathElements[pathElements.length - 1];
         String[] results = new String[2];
-        results[0] = path.replace(result, "").replace("${/}", "/");
-        if (!result.toLowerCase().endsWith(suffix.toLowerCase())) {
+        pathElements[pathElements.length - 1] = "";
+        results[0] = String.join("/", pathElements);
+        // absolute or relative path
+        if (! results[0].matches("([a-zA-Z]:)?/.*|.*([$%]\\{.+}).*") && ! results[0].contains("./"))
+            results[0] = "./" + results[0];
+        if (RobotOptionsProvider.getInstance(project).stripVariableInLibraryPath()) {
+            results[0] = results[0].replaceAll("[$%]\\{|}", "");
+        }
+        if (!suffix.equals("") && !result.toLowerCase().endsWith(suffix.toLowerCase())) {
             result += suffix;
         }
         results[1] = result;

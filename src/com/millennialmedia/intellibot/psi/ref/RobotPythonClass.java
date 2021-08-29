@@ -22,11 +22,13 @@ public class RobotPythonClass extends RobotPythonWrapper implements KeywordFile,
     private final String library;
     private final PyClass pythonClass;
     private final ImportType importType;
+    private final String originalLibrary;
 
-    public RobotPythonClass(@NotNull String library, @NotNull PyClass pythonClass, @NotNull ImportType importType) {
+    public RobotPythonClass(@NotNull String library, @NotNull String originalLibrary, @NotNull PyClass pythonClass, @NotNull ImportType importType) {
         this.library = library;
         this.pythonClass = pythonClass;
         this.importType = importType;
+        this.originalLibrary = originalLibrary;
     }
 
     @NotNull
@@ -51,13 +53,19 @@ public class RobotPythonClass extends RobotPythonWrapper implements KeywordFile,
 
     @NotNull
     @Override
+    public Collection<DefinedVariable> getOwnDefinedVariables() {
+        return getDefinedVariables();
+    }
+
+    @NotNull
+    @Override
     public ImportType getImportType() {
         return this.importType;
     }
 
     @NotNull
     @Override
-    public Collection<KeywordFile> getImportedFiles(boolean includeTransitive) {
+    public Collection<KeywordFile> getImportedFiles(int maxTransitiveDepth) {
         return Collections.emptyList();
     }
 
@@ -85,6 +93,16 @@ public class RobotPythonClass extends RobotPythonWrapper implements KeywordFile,
     @NotNull
     @Override
     public String getDebugFileName() {
+        return this.library;
+    }
+
+    @NotNull
+    public String getOriginalLibrary() {
+        return this.originalLibrary;
+    }
+
+    @NotNull
+    public String getLibrary() {
         return this.library;
     }
 

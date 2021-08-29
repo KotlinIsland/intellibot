@@ -1,7 +1,7 @@
 <idea-plugin version="2">
-    <id>com.millennialmedia.intellibot</id>
-    <name>IntelliBot</name>
-    <version>0.10.143.381</version>
+    <id>com.millennialmedia.intellibot@lte2000</id>
+    <name>IntelliBot #patched</name>
+    <version>0.10.143.397</version>
     <vendor email="intellibot@millennialmedia.com" url="http://www.millennialmedia.com">Millennial Media</vendor>
 
     <depends>com.intellij.modules.lang</depends>
@@ -27,12 +27,9 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      <h2>0.10</h2>
-      <ul>
-        <li>corrected RobotFramework 3.x built in variables</li>
-        <li>improved some python library imports (thanks to Tillaert)</li>
-        <li>added 'keyword' decorator for python keywords (thanks to Tillaert)</li>
-      </ul>
+      This is a temp patched IntelliBot (as the original plugin is not updated by the originator).<br>
+      Find it in <a href="https://github.com/lte2000/intellibot">Github</a>.<br>
+      See <a href="https://github.com/lte2000/intellibot#readme">what is fixed/enhanced/new added</a>.
       ]]>
     </change-notes>
 
@@ -56,6 +53,8 @@
 
         <projectConfigurable groupId="language" instance="com.millennialmedia.intellibot.ide.config.RobotConfiguration"/>
         <projectService serviceImplementation="com.millennialmedia.intellibot.ide.config.RobotOptionsProvider"/>
+        <projectService serviceImplementation="com.millennialmedia.intellibot.psi.RobotProjectData"/>
+        <typedHandler implementation="com.millennialmedia.intellibot.ide.RobotTypedHandlerDelegate"/>
 
         <fileTypeFactory implementation="com.millennialmedia.intellibot.psi.RobotFileTypeHandler"/>
         <colorSettingsPage implementation="com.millennialmedia.intellibot.ide.config.RobotColorsPage"/>

@@ -30,8 +30,6 @@ public class PythonResolver {
     private static Boolean hasPython;
 
     private PythonResolver() {
-        NotificationsConfiguration.getNotificationsConfiguration().register(
-                "intellibot.debug", NotificationDisplayType.NONE);
     }
 
     @Nullable
@@ -73,8 +71,17 @@ public class PythonResolver {
         return null;
     }
 
+    // TODO: for the "Library Process", findClass may get unwanted class, e.g. multiprocessing.Process
+    // do some cook here for name.equals("Process") ?
+    // or add robot/library in project interpreter's path
     @Nullable
     public static PyClass findClass(@NotNull String name, @NotNull Project project) {
+        return findClass(name, project, true);
+
+    }
+
+    @Nullable
+    public static PyClass findClass(@NotNull String name, @NotNull Project project, boolean allowMatchByName) {
         if (!hasPython(project)) {
             return null;
         }
@@ -101,7 +108,35 @@ public class PythonResolver {
                 matchedByName = pyClass;
             }
         }
-        return matchedByName;
+        // depending on PYTHONPATH, pyClass.getQualifiedName() may return BuiltIn.BuiltIn or robot.libraries.BuiltIn.BuiltIn,
+        if (! name.startsWith("robot.libraries.")) {
+            name = "robot.libraries." + name;
+            for (PyClass pyClass : classes) {
+                String qName = pyClass.getQualifiedName();
+                if (qName != null) {
+                    // For importing 'Library foo.bar.bar'
+                    if (qName.equals(name)) {
+                        return pyClass;
+                    }
+
+                    // For importing 'Library foo.bar'
+                    if (qName.equals(name + "." + shortName)) {
+                        return pyClass;
+                    }
+                }
+//
+//                // save last match on full name should qualified name never match
+//                String className = pyClass.getName();
+//                if (className != null && className.equals(name)) {
+//                    matchedByName = pyClass;
+//                }
+            }
+        }
+        if (allowMatchByName) {
+            return matchedByName;
+        } else {
+            return null;
+        }
     }
 
     @NotNull
