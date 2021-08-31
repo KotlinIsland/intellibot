@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.millennialmedia.intellibot@lte2000</id>
     <name>IntelliBot #patched</name>
-    <version>0.10.143.398</version>
+    <version>0.10.143.398.1</version>
     <vendor url="https://plugins.jetbrains.com/plugin/17424-intellibot-patched">Millennial Media</vendor>
 
     <depends>com.intellij.modules.lang</depends>
@@ -31,12 +31,7 @@
       <br>
       In this release:
       <ul>
-        <li>support <b>Tasks</b> test data section</li>
-        <li>optimize code inspections</li>
-        <li>support line continuation "..." in old syntax FOR loop body which begin with "\"</li>
-        <li>handle variable name started with digit correctly</li>
-        <li>same relative physical resource/library pathname now will be resolved to different file for robot files in different directory</li>
-        <li>search resource/library using relative physical path in directory relative to every project Content Root if it is not found in the directory relative to the robot file</li>
+        <li>search order of relative physical resource/library path: robot file, project source root, project content root</li>
       </ul>
       ]]>
     </change-notes>

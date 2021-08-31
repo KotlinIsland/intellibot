@@ -199,7 +199,14 @@ public class RobotFileManager {
             if (psiFile != null) {
                 return psiFile;
             }
-            VirtualFile[] contentRoots = ProjectRootManager.getInstance(project).getContentRoots();
+            VirtualFile[] contentRoots = ProjectRootManager.getInstance(project).getContentSourceRoots();
+            for (VirtualFile contentRoot : contentRoots) {
+                psiFile = findFileInRelativePath(contentRoot, original, path, fileName, project, search, originalElement, directory);
+                if (psiFile != null) {
+                    return psiFile;
+                }
+            }
+            contentRoots = ProjectRootManager.getInstance(project).getContentRoots();
             for (VirtualFile contentRoot : contentRoots) {
                 psiFile = findFileInRelativePath(contentRoot, original, path, fileName, project, search, originalElement, directory);
                 if (psiFile != null) {
