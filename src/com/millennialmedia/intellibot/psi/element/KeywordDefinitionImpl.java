@@ -34,6 +34,8 @@ public class KeywordDefinitionImpl extends RobotPsiElementBase implements Keywor
     private Collection<DefinedVariable> definedInlineVariables;
     private Collection<DefinedVariable> definedArguments;
     private String namespace;
+    private Pattern namespacePattern;
+    private Boolean embedded;
 
     public KeywordDefinitionImpl(@NotNull final ASTNode node) {
         super(node);
@@ -153,25 +155,29 @@ public class KeywordDefinitionImpl extends RobotPsiElementBase implements Keywor
         if (text == null) {
             return false;
         }
-        String myText = getPresentableText();
         Pattern namePattern = this.pattern;
         if (namePattern == null) {
-            String myNamespace = getNamespace();
-            namePattern = Pattern.compile(buildPattern(myNamespace, myText.trim()), Pattern.CASE_INSENSITIVE);
-            this.pattern = namePattern;
+            namePattern = buildPattern(getNamespace(), getPresentableText().trim());
         }
-//        text = text.trim();
-//        if (namePattern.matcher(text).matches())
-//            return true;
-//        int p = text.lastIndexOf('.');
-//        if (p >= 0) {
-//            String lib = text.substring(0, p);
-//            String kw = text.substring(p+1).replaceAll("[_ ]", "");
-//            text = lib + "." + kw;
-//        } else {
-//            text = text.replaceAll("[_ ]", "");
-//        }
-        return namePattern.matcher(text.replaceAll("[_ ]", "")).matches();
+        text = text.trim();
+        if (this.embedded) {
+            if (namePattern.matcher(text).matches())
+                return true;
+        } else {
+            if (namePattern.matcher(text.replaceAll("[_ ]", "")).matches())
+                return true;
+        }
+        Matcher prefix = this.namespacePattern.matcher(text);
+        if (prefix.lookingAt()) {
+            text = text.substring(prefix.end());
+            if (this.embedded) {
+                return namePattern.matcher(text).matches();
+            } else {
+                return namePattern.matcher(text.replaceAll("[_ ]", "")).matches();
+            }
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -205,19 +211,21 @@ public class KeywordDefinitionImpl extends RobotPsiElementBase implements Keywor
     // These kind of keywords are also used the same way as other keywords except that spaces and underscores are not ignored in their names.
     // They are, however, case-insensitive like other keywords.
     // For example, the keyword in the example above could be used like select x from list, but not like Select x fromlist.
-    private String buildPattern(String namespace, String text) {
+    private Pattern buildPattern(String namespace, String text) {
         Matcher matcher = PATTERN.matcher(text);
 
         String result = "";
         if (matcher.matches()) {
             result = buildPatternEmbedding(text);
+            this.embedded = true;
         } else {
             result = text.length() > 0 ? Pattern.quote(text.replaceAll("[_ ]", "")) : text;
+            this.embedded = false;
         }
-        if (namespace != null && namespace.length() > 0) {
-            result = "(" + Pattern.quote(namespace.replaceAll("[_ ]", "") + DOT) + ")?" + result;
-        }
-        return result;
+        this.namespacePattern = Pattern.compile(Pattern.quote(namespace != null && namespace.length() > 0 ? namespace + DOT : ""), Pattern.CASE_INSENSITIVE);
+        // this.embedded, this.namespacePattern is implicit in this.pattern, so assign this.pattern at last.
+        this.pattern = Pattern.compile(result, Pattern.CASE_INSENSITIVE);
+        return this.pattern;
     }
 
     private String buildPatternEmbedding(String text) {
