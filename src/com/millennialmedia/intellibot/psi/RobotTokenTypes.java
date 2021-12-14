@@ -20,6 +20,9 @@ public interface RobotTokenTypes {
     RobotElementType COMMENT = new RobotElementType("COMMENT");
     RobotElementType GHERKIN = new RobotElementType("GHERKIN");
     RobotElementType KEYWORD_STATEMENT = new RobotElementType("KEYWORD_STATEMENT");
+    RobotElementType RESERVED_WORD = new RobotElementType("RESERVED_WORD");
+    RobotElementType RESERVED_WORD_NEWLINE = new RobotElementType("RESERVED_WORD_NEWLINE");
+    RobotElementType SETTING_RESERVED_WORD = new RobotElementType("SETTING_RESERVED_WORD");
 
     RobotElementType ERROR = new RobotElementType("ERROR");
     RobotElementType WHITESPACE = new RobotElementType("WHITESPACE");

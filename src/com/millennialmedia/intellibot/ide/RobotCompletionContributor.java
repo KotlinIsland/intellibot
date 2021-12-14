@@ -52,93 +52,6 @@ public class RobotCompletionContributor extends CompletionContributor {
         }
     };
 
-//    public RobotCompletionContributor() {
-//        // This is the rule for adding Headings (*** Settings ***, *** Test Cases ***)
-//        extend(CompletionType.BASIC,
-//                psiElement().inFile(psiElement(RobotFile.class)),
-//                new CompletionProvider<CompletionParameters>() {
-//                    @Override
-//                    protected void addCompletions(@NotNull CompletionParameters parameters,
-//                                                  ProcessingContext context,
-//                                                  @NotNull CompletionResultSet results) {
-//                        addSyntaxLookup(RobotTokenTypes.HEADING, results, NEW_LINE);
-//                    }
-//                });
-//        // This is the rule for adding Bracket Settings ([Tags], [Setup])
-//        extend(CompletionType.BASIC,
-//                psiElement().inFile(psiElement(RobotFile.class)),
-//                new CompletionProvider<CompletionParameters>() {
-//                    @Override
-//                    protected void addCompletions(@NotNull CompletionParameters parameters,
-//                                                  ProcessingContext context,
-//                                                  @NotNull CompletionResultSet results) {
-//                        // TODO: some brackets are only for Test Cases, some only Keywords, some both
-//                        PsiElement heading = getHeading(parameters.getOriginalPosition());
-//                        if (isInTestCases(heading) || isInKeywords(heading)) {
-//                            addSyntaxLookup(RobotTokenTypes.BRACKET_SETTING, results, SUPER_SPACE);
-//                        }
-//                    }
-//                });
-//        // This is the rule for adding settings and imports (Library, Test Setup)
-//        extend(CompletionType.BASIC,
-//                psiElement().inFile(psiElement(RobotFile.class)),
-//                new CompletionProvider<CompletionParameters>() {
-//                    @Override
-//                    protected void addCompletions(@NotNull CompletionParameters parameters,
-//                                                  ProcessingContext context,
-//                                                  @NotNull CompletionResultSet results) {
-//                        PsiElement heading = getHeading(parameters.getOriginalPosition());
-//                        if (isInSettings(heading)) {
-//                            addSyntaxLookup(RobotTokenTypes.SETTING, results, SUPER_SPACE);
-//                            addSyntaxLookup(RobotTokenTypes.IMPORT, results, SUPER_SPACE);
-//                        }
-//                    }
-//                });
-//        // This is the rule for adding Gherkin (When, Then)
-//        extend(CompletionType.BASIC,
-//                psiElement().inFile(psiElement(RobotFile.class)),
-//                new CompletionProvider<CompletionParameters>() {
-//                    @Override
-//                    protected void addCompletions(@NotNull CompletionParameters parameters,
-//                                                  ProcessingContext context,
-//                                                  @NotNull CompletionResultSet results) {
-//                        PsiElement heading = getHeading(parameters.getOriginalPosition());
-//                        if (isInTestCases(heading)) {
-//                            addSyntaxLookup(RobotTokenTypes.GHERKIN, results, TailType.SPACE);
-//                        }
-//                    }
-//                });
-//        // This is the rule for adding imported keywords and library methods
-//        extend(CompletionType.BASIC,
-//                psiElement().inFile(psiElement(RobotFile.class)),
-//                new CompletionProvider<CompletionParameters>() {
-//                    @Override
-//                    protected void addCompletions(@NotNull CompletionParameters parameters,
-//                                                  ProcessingContext context,
-//                                                  @NotNull CompletionResultSet result) {
-//                        PsiElement heading = getHeading(parameters.getOriginalPosition());
-//                        if (isInTestCases(heading) || isInKeywords(heading)) {
-//                            addRobotKeywords(result, parameters.getOriginalFile());
-//                        }
-//                    }
-//                });
-//        // This is the rule for adding included variable definitions
-//        // TODO: include variables defined in the current statement
-//        extend(CompletionType.BASIC,
-//                psiElement().inFile(psiElement(RobotFile.class)),
-//                new CompletionProvider<CompletionParameters>() {
-//                    @Override
-//                    protected void addCompletions(@NotNull CompletionParameters parameters,
-//                                                  ProcessingContext context,
-//                                                  @NotNull CompletionResultSet result) {
-//                        PsiElement heading = getHeading(parameters.getOriginalPosition());
-//                        if (isInTestCases(heading) || isInKeywords(heading) || isInSettings(heading)) {
-//                            addRobotVariables(result, parameters.getOriginalFile(), parameters.getOriginalPosition());
-//                        }
-//                    }
-//                });
-//    }
-
     // TODO: code completion only be triggered when type letters or digits
     // how to do with ***, %{, @{ ?
     public RobotCompletionContributor() {
@@ -158,47 +71,55 @@ public class RobotCompletionContributor extends CompletionContributor {
                                 addSyntaxLookup(RobotTokenTypes.HEADING, results, NEW_LINE, 4);
                             } else {
                                 addSyntaxLookup(RobotTokenTypes.HEADING, results, NEW_LINE);
-                            }
-
-                            if (!isStartsWith3Star) {
-                                // This is the rule for adding settings and imports (Library, Test Setup)
                                 if (isInSettings(heading)) {
+                                    // This is the rule for adding settings and imports (Library, Test Setup)
                                     addSyntaxLookup(RobotTokenTypes.SETTING, results, SUPER_SPACE);
                                     addSyntaxLookup(RobotTokenTypes.IMPORT, results, SUPER_SPACE);
-                                }
-
-                                // should we show following 2 items? maybe help detect duplicated name
-
-                                // This is the rule for adding imported keywords and library methods
-                                if (isInTestCases(heading) || isInKeywords(heading)) {
+                                // should we show following 2 if items? maybe can only help detect duplicated name
+                                } else if (isInTestCases(heading) || isInKeywords(heading)) {
+                                    // This is the rule for adding imported keywords and library methods
                                     addRobotKeywords(results, parameters.getOriginalFile());
-                                }
-
-                                // This is the rule for adding included variable definitions
-                                if (isInVariables(heading)) {
+                                } else if (isInVariables(heading)) {
+                                    // This is the rule for adding included variable definitions
                                     addRobotVariables(results, parameters.getOriginalFile(), parameters.getOriginalPosition());
                                 }
                             }
                         } else {
-                            // This is the rule for adding Bracket Settings ([Tags], [Setup])
-                            // TODO: some brackets are only for Test Cases, some only Keywords, some both
-                            if (isInTestCases(heading) || isInKeywords(heading)) {
-                                addSyntaxLookup(RobotTokenTypes.BRACKET_SETTING, results, SUPER_SPACE);
-                            }
-
-                            // This is the rule for adding Gherkin (When, Then)
                             if (isInTestCases(heading)) {
+                                // This is the rule for adding Bracket Settings ([Tags], [Setup])
+                                // TODO: some brackets are only for Test Cases, some only Keywords, some both
+                                addSyntaxLookup(RobotTokenTypes.BRACKET_SETTING, results, SUPER_SPACE);
+
+                                // This is the rule for adding Gherkin (When, Then)
                                 addSyntaxLookup(RobotTokenTypes.GHERKIN, results, TailType.SPACE);
-                            }
 
-                            // This is the rule for adding imported keywords and library methods
-                            if (isInTestCases(heading) || isInKeywords(heading)) {
+                                // This is the rule for adding imported keywords and library methods
                                 addRobotKeywords(results, parameters.getOriginalFile());
-                            }
 
-                            // This is the rule for adding included variable definitions
-                            // TODO: include variables defined in the current statement
-                            if (isInTestCases(heading) || isInKeywords(heading) || isInSettings(heading)) {
+                                // This is the rule for adding included variable definitions
+                                // TODO: include variables defined in the current statement
+                                addRobotVariables(results, parameters.getOriginalFile(), parameters.getOriginalPosition());
+
+                                // This is the rule for adding reserved word
+                                addSyntaxLookup(RobotTokenTypes.RESERVED_WORD, results, SUPER_SPACE, 0, true);
+                                addSyntaxLookup(RobotTokenTypes.RESERVED_WORD_NEWLINE, results, TailType.NONE, 0, true);
+                            } else if (isInKeywords(heading)) {
+                                // This is the rule for adding Bracket Settings ([Tags], [Setup])
+                                // TODO: some brackets are only for Test Cases, some only Keywords, some both
+                                addSyntaxLookup(RobotTokenTypes.BRACKET_SETTING, results, SUPER_SPACE);
+
+                                // This is the rule for adding imported keywords and library methods
+                                addRobotKeywords(results, parameters.getOriginalFile());
+
+                                // This is the rule for adding imported keywords and library methods
+                                addRobotVariables(results, parameters.getOriginalFile(), parameters.getOriginalPosition());
+
+                                // This is the rule for adding reserved word
+                                addSyntaxLookup(RobotTokenTypes.RESERVED_WORD, results, SUPER_SPACE, 0, true);
+                                addSyntaxLookup(RobotTokenTypes.RESERVED_WORD_NEWLINE, results, TailType.NONE, 0, true);
+                            } else if (isInSettings(heading)) {
+                                addSyntaxLookup(RobotTokenTypes.SETTING_RESERVED_WORD, results, SUPER_SPACE, 0, true);
+                                // This is the rule for adding included variable definitions
                                 addRobotVariables(results, parameters.getOriginalFile(), parameters.getOriginalPosition());
                             }
                         }
@@ -337,10 +258,14 @@ public class RobotCompletionContributor extends CompletionContributor {
     }
 
     private static void addSyntaxLookup(@NotNull RobotElementType type, @NotNull CompletionResultSet results, @NotNull TailType tail) {
-        addSyntaxLookup(type, results, tail, 0);
+        addSyntaxLookup(type, results, tail, 0, false);
     }
 
     private static void addSyntaxLookup(@NotNull RobotElementType type, @NotNull CompletionResultSet results, @NotNull TailType tail, int removeTargetPrefix) {
+        addSyntaxLookup(type, results, tail, removeTargetPrefix, false);
+    }
+
+    private static void addSyntaxLookup(@NotNull RobotElementType type, @NotNull CompletionResultSet results, @NotNull TailType tail, int removeTargetPrefix, boolean caseSensitivity) {
         Collection<RecommendationWord> words = RobotKeywordProvider.getInstance().getRecommendationsForType(type);
         for (RecommendationWord word : words) {
             String text = word.getLookup();
@@ -353,7 +278,7 @@ public class RobotCompletionContributor extends CompletionContributor {
                     LookupElementBuilder.create(lookupString)
                             .withLookupString(text)
                             .withPresentableText(displayString)
-                            .withCaseSensitivity(false),
+                            .withCaseSensitivity(caseSensitivity),
                     tail);
             results.addElement(element);
         }

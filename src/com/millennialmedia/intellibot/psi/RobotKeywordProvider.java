@@ -191,6 +191,18 @@ public class RobotKeywordProvider {
 
         SETTINGS_FOLLOWED_BY_VARIABLE_DEFINITIONS.add("Arguments");
         SETTINGS_FOLLOWED_BY_VARIABLE_DEFINITIONS.add("[Arguments]");
+
+        addRecommendation(RobotTokenTypes.RESERVED_WORD, "IF", "IF");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD, "ELSE IF", "ELSE IF");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD, "FOR", "FOR");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD, ":FOR", ":FOR");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD, "IN", "IN");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD, "IN RANGE", "IN RANGE");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD, "IN ENUMERATE", "IN ENUMERATE");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD, "IN ZIP", "IN ZIP");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD_NEWLINE, "ELSE", "ELSE");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD_NEWLINE, "END", "END");
+        addRecommendation(RobotTokenTypes.SETTING_RESERVED_WORD, "WITH NAME", "WITH NAME");
     }
 
     private static void addRecommendation(@NotNull RobotElementType type, @NotNull String word, @NotNull String lookup) {
