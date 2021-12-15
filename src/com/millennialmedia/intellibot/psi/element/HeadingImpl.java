@@ -108,7 +108,7 @@ public class HeadingImpl extends RobotPsiElementBase implements Heading {
         this.invokableReferences = null;
         this.usedVariables = null;
         this.referencedFiles = null;
-        if (! getContainingFile().getName().equals(DEFAULT_RESOURCE_NAME))
+        if (getContainingFile().getName().equals(DEFAULT_RESOURCE_NAME))
             RobotProjectData.getInstance(getProject()).setProjectGlobalDefaultVariables(null);
     }
 
