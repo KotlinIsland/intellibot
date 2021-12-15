@@ -8,6 +8,7 @@ import com.millennialmedia.intellibot.psi.element.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -42,8 +43,18 @@ public class ResolverUtils {
         }
 
         // ROBOTFRAMEWORK only import keyword from Library and Resource
-        for (KeywordFile imported : robotFile.getImportedFiles(-1)) {
-            if (imported.getImportType() == ImportType.LIBRARY || imported.getImportType() == ImportType.RESOURCE) {
+        Collection<KeywordFile> allImportedFiles = robotFile.getImportedFiles(-1);
+        for (KeywordFile imported : allImportedFiles) {
+            if (imported.getImportType() == ImportType.RESOURCE) {
+                for (DefinedKeyword keyword : imported.getDefinedKeywords()) {
+                    if (keyword.matches(keywordText)) {
+                        return keyword.reference();
+                    }
+                }
+            }
+        }
+        for (KeywordFile imported : allImportedFiles) {
+            if (imported.getImportType() == ImportType.LIBRARY) {
                 for (DefinedKeyword keyword : imported.getDefinedKeywords()) {
                     if (keyword.matches(keywordText)) {
                         return keyword.reference();
