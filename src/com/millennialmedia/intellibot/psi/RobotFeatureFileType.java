@@ -13,6 +13,8 @@ import javax.swing.*;
 public class RobotFeatureFileType extends LanguageFileType {
 
     private static final RobotFeatureFileType INSTANCE = new RobotFeatureFileType();
+    public static final String ROBOT_EXTENSION = "robot";
+    static final String RESOURCE_EXTENSION = "resource";
 
     private RobotFeatureFileType() {
         super(RobotLanguage.INSTANCE);
@@ -29,12 +31,12 @@ public class RobotFeatureFileType extends LanguageFileType {
 
     @NotNull
     public String getDescription() {
-        return "Robot Feature Files";
+        return "Robot Framework Test Data";
     }
 
     @NotNull
     public String getDefaultExtension() {
-        return "robot";
+        return ROBOT_EXTENSION;
     }
 
     @Nullable
