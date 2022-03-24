@@ -52,7 +52,7 @@ public abstract class RobotPsiElementBase extends ASTWrapperPsiElement implement
     @NotNull
     @Override
     public String getDebugFileName() {
-        return getContainingFile().getVirtualFile().getName();
+        return getContainingFile().getOriginalFile().getVirtualFile().getName();
     }
 
     @NotNull

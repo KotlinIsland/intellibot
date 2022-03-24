@@ -396,7 +396,7 @@ public class HeadingImpl extends RobotPsiElementBase implements Heading {
         /* TODO: judge whether the PyFile is in subdirectory of a RobotPythonClass need import(in files)
            if no, don't import this library
            pyFile.getParent().getParent() ==
-           RobotPythonClass.pythonClass.getContainingFile().getVirtualFile().getParent() ?
+           RobotPythonClass.pythonClass.getContainingFile().getOriginalFile().getVirtualFile().getParent() ?
          */
 
         String withName = "";

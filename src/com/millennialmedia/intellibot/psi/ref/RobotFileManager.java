@@ -194,7 +194,7 @@ public class RobotFileManager {
 
         if (! isAbsolutePath(path)) {
             // contains a relative path
-            VirtualFile workingDir = originalElement.getContainingFile().getVirtualFile().getParent();
+            VirtualFile workingDir = originalElement.getContainingFile().getOriginalFile().getVirtualFile().getParent();
             PsiFile psiFile = findFileInRelativePath(workingDir, original, path, fileName, project, search, originalElement, directory);
             if (psiFile != null) {
                 return psiFile;

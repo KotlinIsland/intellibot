@@ -109,7 +109,7 @@ public class RobotPythonClass extends RobotPythonWrapper implements KeywordFile,
     @NotNull
     @Override
     public String getDebugText() {
-        return this.pythonClass.getContainingFile().getVirtualFile().getName();
+        return this.pythonClass.getContainingFile().getOriginalFile().getVirtualFile().getName();
     }
 
     @NotNull

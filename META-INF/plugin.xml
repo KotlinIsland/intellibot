@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.millennialmedia.intellibot@lte2000</id>
     <name>IntelliBot #patched</name>
-    <version>0.12.191.8026</version>
+    <version>0.12.191.8026.1</version>
     <vendor url="https://plugins.jetbrains.com/plugin/17424-intellibot-patched">Millennial Media</vendor>
 
     <depends>com.intellij.modules.lang</depends>
@@ -31,10 +31,7 @@
       <br>
       In this release:
       <ul>
-        <li>code completion: FOR/IN xxx/IF/ELSE/END/WITH NAME</li>
-        <li>fix issue <a href="https://github.com/lte2000/intellibot/issues/43">#43</a>: Keywords with embedded arguments in test suites and resource don't work
-        <li>keyword resolving priority: resource > library
-        <li>fix wrong logic for global default variables when modifying default resource
+        <li>fix issue <a href="https://github.com/lte2000/intellibot/issues/46">#46</a>: NullPointerException
       </ul>
       ]]>
     </change-notes>
