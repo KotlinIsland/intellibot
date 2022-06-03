@@ -24,6 +24,7 @@ public class ResolverUtils {
     }
 
     private static final Pattern IF_ELSE_PATTERN = Pattern.compile("IF|ELSE( IF)?");
+    private static final Pattern TRY_EXCEPT_PATTERN = Pattern.compile("TRY|EXCEPT|FINALLY");
     @Nullable
     public static PsiElement resolveKeywordFromFile(@Nullable String keywordText, @Nullable PsiFile file) {
         if (keywordText == null) {
@@ -34,6 +35,14 @@ public class ResolverUtils {
             return null;
         } else if (IF_ELSE_PATTERN.matcher(keywordText).matches()) {
             keywordText = "Run Keyword If";
+        } else if (TRY_EXCEPT_PATTERN.matcher(keywordText).matches()) {
+            keywordText = "Run Keyword And Ignore Error";
+        } else if (keywordText.equals("CONTINUE")) {
+            keywordText = "Continue For Loop";
+        } else if (keywordText.equals("BREAK")) {
+            keywordText = "Exit For Loop";
+        } else if (keywordText.equals("RETURN")) {
+            keywordText = "Return From Keyword";
         }
         RobotFile robotFile = (RobotFile) file;
         for (DefinedKeyword keyword : robotFile.getDefinedKeywords()) {

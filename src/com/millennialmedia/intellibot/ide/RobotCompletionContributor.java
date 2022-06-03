@@ -52,6 +52,40 @@ public class RobotCompletionContributor extends CompletionContributor {
         }
     };
 
+    private static int insertNewlineIndentSpace(Editor editor, int tailOffset, int spaceCount) {
+        Document document = editor.getDocument();
+        CharSequence chars = document.getCharsSequence();
+        int indentLength = 0;
+        for (int i = tailOffset-1; i >= 0 && chars.charAt(i) != '\n'; i--) {
+            if (chars.charAt(i) == ' ')
+                indentLength++;
+            else
+                indentLength = 0;
+        }
+
+        String indent = "";
+        indentLength += spaceCount;
+        if (indentLength > 0) {
+            indent = new String(new char[indentLength]).replace("\0", " ");
+        }
+        String toAdd = "\n" + indent;
+        Runnable runnable = () -> document.insertString(tailOffset, toAdd);
+        WriteCommandAction.runWriteCommandAction(editor.getProject(), runnable);
+        return indentLength + 1;
+    }
+    private static final TailType NEWLINE_INDENT = new TailType() {
+        @Override
+        public int processTail(Editor editor, int tailOffset) {
+            return moveCaret(editor, tailOffset, insertNewlineIndentSpace(editor, tailOffset, 0));
+        }
+    };
+    private static final TailType NEWLINE_INDENT_SUPERSPACE = new TailType() {
+        @Override
+        public int processTail(Editor editor, int tailOffset) {
+            return moveCaret(editor, tailOffset, insertNewlineIndentSpace(editor, tailOffset, CELL_SEPRATOR_SPACE));
+        }
+    };
+
     // TODO: code completion only be triggered when type letters or digits
     // how to do with ***, %{, @{ ?
     public RobotCompletionContributor() {
@@ -102,7 +136,8 @@ public class RobotCompletionContributor extends CompletionContributor {
 
                                 // This is the rule for adding reserved word
                                 addSyntaxLookup(RobotTokenTypes.RESERVED_WORD, results, SUPER_SPACE, 0, true);
-                                addSyntaxLookup(RobotTokenTypes.RESERVED_WORD_NEWLINE, results, TailType.NONE, 0, true);
+                                addSyntaxLookup(RobotTokenTypes.RESERVED_WORD_NEWLINE_INDENT, results, NEWLINE_INDENT, 0, true);
+                                addSyntaxLookup(RobotTokenTypes.RESERVED_WORD_NEWLINE_INDENT_SUPERSPACE, results, NEWLINE_INDENT_SUPERSPACE, 0, true);
                             } else if (isInKeywords(heading)) {
                                 // This is the rule for adding Bracket Settings ([Tags], [Setup])
                                 // TODO: some brackets are only for Test Cases, some only Keywords, some both
@@ -116,7 +151,8 @@ public class RobotCompletionContributor extends CompletionContributor {
 
                                 // This is the rule for adding reserved word
                                 addSyntaxLookup(RobotTokenTypes.RESERVED_WORD, results, SUPER_SPACE, 0, true);
-                                addSyntaxLookup(RobotTokenTypes.RESERVED_WORD_NEWLINE, results, TailType.NONE, 0, true);
+                                addSyntaxLookup(RobotTokenTypes.RESERVED_WORD_NEWLINE_INDENT, results, NEWLINE_INDENT, 0, true);
+                                addSyntaxLookup(RobotTokenTypes.RESERVED_WORD_NEWLINE_INDENT_SUPERSPACE, results, NEWLINE_INDENT_SUPERSPACE, 0, true);
                             } else if (isInSettings(heading)) {
                                 addSyntaxLookup(RobotTokenTypes.SETTING_RESERVED_WORD, results, SUPER_SPACE, 0, true);
                                 // This is the rule for adding included variable definitions

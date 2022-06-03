@@ -23,7 +23,7 @@ public class RobotKeywordNotFound extends SimpleRobotInspection {
         return RobotBundle.message("INSP.NAME.keyword.undefined");
     }
 
-    private static final Pattern SKIP_PATTERN = Pattern.compile("IN(?: (?:RANGE|ENUMERATE|ZIP))?");
+    private static final Pattern SKIP_PATTERN = Pattern.compile("IN(?: (?:RANGE|ENUMERATE|ZIP))?|TRY|EXCEPT|FINALLY|WHILE|BREAK|CONTINUE|RETURN");
 
     @Override
     public boolean skip(PsiElement element) {
