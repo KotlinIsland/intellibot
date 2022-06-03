@@ -11,7 +11,7 @@ import javax.swing.*;
  */
 public class RobotIcons {
 
-    public static final Icon FILE = IconLoader.findIcon("/images/robot_icon.png");
+    public static final Icon FILE = IconLoader.findIcon("/images/robot_icon.png", RobotIcons.class.getClassLoader());
     public static final Icon HEADING = AllIcons.Nodes.Tag;
     public static final Icon KEYWORD_DEFINITION = AllIcons.Nodes.Method;
     public static final Icon TEST_CASE = AllIcons.RunConfigurations.Junit;

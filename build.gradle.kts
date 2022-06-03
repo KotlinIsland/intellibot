@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.jetbrains.intellij") version "1.3.0"
+    id("org.jetbrains.intellij") version "1.6.0"
 }
 
 repositories {
@@ -8,14 +8,14 @@ repositories {
 }
 
 dependencies{
-    implementation("org.jetbrains:annotations:22.0.0")
+    implementation("org.jetbrains:annotations:23.0.0")
 }
 
-val intellijVersion = System.getenv().getOrDefault("IDEA_VERSION", "PC-2021.3")
+val intellijVersion = System.getenv().getOrDefault("IDEA_VERSION", "PC-2022.1")
 
 val pythonPluginForVersion = mapOf(
-    "PC-2021.3" to "python-ce",
-    "IC-2021.3" to "PythonCore:213.5744.248",
+    "PC-2022.1" to "python-ce",
+    "IC-2022.1" to "PythonCore:221.5744.248",
 )
 
 intellij {
@@ -24,3 +24,7 @@ intellij {
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_11
+
+tasks.patchPluginXml {
+    untilBuild.set("999.*")
+}
