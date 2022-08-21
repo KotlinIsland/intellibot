@@ -21,7 +21,8 @@ public interface RobotTokenTypes {
     RobotElementType GHERKIN = new RobotElementType("GHERKIN");
     RobotElementType KEYWORD_STATEMENT = new RobotElementType("KEYWORD_STATEMENT");
     RobotElementType RESERVED_WORD = new RobotElementType("RESERVED_WORD");
-    RobotElementType RESERVED_WORD_NEWLINE = new RobotElementType("RESERVED_WORD_NEWLINE");
+    RobotElementType RESERVED_WORD_NEWLINE_INDENT = new RobotElementType("RESERVED_WORD_NEWLINE_INDENT");
+    RobotElementType RESERVED_WORD_NEWLINE_INDENT_SUPERSPACE = new RobotElementType("RESERVED_WORD_NEWLINE_INDENT_SUPERSPACE");
     RobotElementType SETTING_RESERVED_WORD = new RobotElementType("SETTING_RESERVED_WORD");
 
     RobotElementType ERROR = new RobotElementType("ERROR");

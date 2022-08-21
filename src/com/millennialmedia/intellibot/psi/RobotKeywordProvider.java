@@ -200,9 +200,16 @@ public class RobotKeywordProvider {
         addRecommendation(RobotTokenTypes.RESERVED_WORD, "IN RANGE", "IN RANGE");
         addRecommendation(RobotTokenTypes.RESERVED_WORD, "IN ENUMERATE", "IN ENUMERATE");
         addRecommendation(RobotTokenTypes.RESERVED_WORD, "IN ZIP", "IN ZIP");
-        addRecommendation(RobotTokenTypes.RESERVED_WORD_NEWLINE, "ELSE", "ELSE");
-        addRecommendation(RobotTokenTypes.RESERVED_WORD_NEWLINE, "END", "END");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD, "ELSE", "ELSE");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD_NEWLINE_INDENT, "END", "END");
         addRecommendation(RobotTokenTypes.SETTING_RESERVED_WORD, "WITH NAME", "WITH NAME");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD_NEWLINE_INDENT_SUPERSPACE, "TRY", "TRY");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD, "EXCEPT", "EXCEPT");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD_NEWLINE_INDENT_SUPERSPACE, "FINALLY", "FINALLY");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD, "WHILE", "WHILE");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD_NEWLINE_INDENT, "BREAK", "BREAK");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD_NEWLINE_INDENT, "CONTINUE", "CONTINUE");
+        addRecommendation(RobotTokenTypes.RESERVED_WORD, "RETURN", "RETURN");
     }
 
     private static void addRecommendation(@NotNull RobotElementType type, @NotNull String word, @NotNull String lookup) {

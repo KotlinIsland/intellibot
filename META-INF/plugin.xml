@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.millennialmedia.intellibot@lte2000</id>
     <name>IntelliBot #patched</name>
-    <version>0.13.191.8026</version>
+    <version>0.13.191.8026.1</version>
     <vendor url="https://plugins.jetbrains.com/plugin/17424-intellibot-patched">Millennial Media</vendor>
 
     <depends>com.intellij.modules.lang</depends>
@@ -31,8 +31,13 @@
       <br>
       In this release:
       <ul>
-        <li>fix issue <a href="https://github.com/lte2000/intellibot/issues/46">#46</a>: NullPointerException
-        <li>adjust code of FileType</li>
+        <li>issue <a href="https://github.com/lte2000/intellibot/issues/48">#48</a>: Support Robot Framework 5.0:<br>
+            TRY/EXCEPT<br>
+            WHILE<br>
+            Inline IF<br>
+            BREAK and CONTINUE<br>
+            RETURN
+        </li>
       </ul>
       ]]>
     </change-notes>
