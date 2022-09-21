@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.millennialmedia.intellibot@lte2000</id>
     <name>IntelliBot #patched</name>
-    <version>0.14.191.8026.1</version>
+    <version>0.14.191.8026.2</version>
     <vendor url="https://plugins.jetbrains.com/plugin/17424-intellibot-patched">Millennial Media</vendor>
 
     <depends>com.intellij.modules.lang</depends>
@@ -31,8 +31,8 @@
       <br>
       In this release:
       <ul>
-        <li> fix issue <a href="https://github.com/lte2000/intellibot/issues/54">#54</a>: ArrayIndexOutOfBoundsException if use decorator as "@Keyword()".
-        </li>
+        <li> fix issue <a href="https://github.com/lte2000/intellibot/issues/53">#53</a>: null baseDir in some situation.</li>
+        <li> fix issue <a href="https://github.com/lte2000/intellibot/issues/54">#54</a>: ArrayIndexOutOfBoundsException if use decorator as "@Keyword()".</li>
       </ul>
       ]]>
     </change-notes>
