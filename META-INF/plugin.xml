@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.millennialmedia.intellibot@lte2000</id>
     <name>IntelliBot #patched</name>
-    <version>0.14.191.8026.2</version>
+    <version>0.14.191.8026.3</version>
     <vendor url="https://plugins.jetbrains.com/plugin/17424-intellibot-patched">Millennial Media</vendor>
 
     <depends>com.intellij.modules.lang</depends>
@@ -31,8 +31,9 @@
       <br>
       In this release:
       <ul>
-        <li> fix issue <a href="https://github.com/lte2000/intellibot/issues/53">#53</a>: null baseDir in some situation.</li>
-        <li> fix issue <a href="https://github.com/lte2000/intellibot/issues/54">#54</a>: ArrayIndexOutOfBoundsException if use decorator as "@Keyword()".</li>
+        <li>fix issue <a href="https://github.com/lte2000/intellibot/issues/53">#53</a>: null baseDir in some situation.</li>
+        <li>fix issue <a href="https://github.com/lte2000/intellibot/issues/54">#54</a>: ArrayIndexOutOfBoundsException if use decorator as "@Keyword()".</li>
+        <li>Set Inspection RobotImportNotUsed default to disabled</li>
       </ul>
       ]]>
     </change-notes>
@@ -105,7 +106,7 @@
         <!-- TODO: inspection: warn: import python file vs class -->
         <!-- Inspections: Cleanup -->
         <localInspection language="Robot" shortName="RobotImportNotUsed" bundle="com.millennialmedia.intellibot.RobotBundle"
-                         key="INSP.NAME.import.unused" groupPath="Robot" groupKey="INSP.GROUP.cleanup" enabledByDefault="true"
+                         key="INSP.NAME.import.unused" groupPath="Robot" groupKey="INSP.GROUP.cleanup" enabledByDefault="false"
                          level="WARNING" implementationClass="com.millennialmedia.intellibot.ide.inspections.cleanup.RobotImportNotUsed"/>
         <!-- Inspections: Readability -->
         <localInspection language="Robot" shortName="RobotGherkinInspection" bundle="com.millennialmedia.intellibot.RobotBundle"
