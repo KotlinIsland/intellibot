@@ -233,9 +233,12 @@ public class RobotFileManager {
     }
 
     @Nullable
-    private static PsiFile findFileInRelativePath(@NotNull VirtualFile baseDir, @NotNull String original, @NotNull String path, @NotNull String fileName,
+    private static PsiFile findFileInRelativePath(VirtualFile baseDir, @NotNull String original, @NotNull String path, @NotNull String fileName,
                                     @NotNull Project project, @NotNull GlobalSearchScope search,
                                     @NotNull PsiElement originalElement, boolean directory) {
+        if (baseDir == null) {
+            return null;
+        }
         VirtualFile relativePath = baseDir.findFileByRelativePath(path);
         if (relativePath != null && relativePath.isDirectory() && relativePath.getCanonicalPath() != null) {
             String newpath = relativePath.getCanonicalPath();

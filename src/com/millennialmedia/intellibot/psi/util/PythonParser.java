@@ -58,11 +58,15 @@ public class PythonParser {
         if (!decorator.hasArgumentList()) {
             return null;
         }
+        PyExpression[] args = decorator.getArguments();
+        if (args.length == 0) {
+            return null;
+        }
 
         PyExpression keywordNameArgument = decorator.getKeywordArgument("name");
 
-        if (keywordNameArgument == null && decorator.getArguments()[0].getName() == null) {
-            keywordNameArgument = decorator.getArguments()[0];
+        if (keywordNameArgument == null && args[0].getName() == null) {
+            keywordNameArgument = args[0];
         }
 
         if (keywordNameArgument != null) {
