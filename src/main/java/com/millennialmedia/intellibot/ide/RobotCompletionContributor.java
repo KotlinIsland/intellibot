@@ -102,9 +102,9 @@ public class RobotCompletionContributor extends CompletionContributor {
                             boolean isStartsWith3Star = parameters.getPosition().getText().startsWith("***");
                             // This is the rule for adding Headings (*** Settings ***, *** Test Cases ***)
                             if (isStartsWith3Star) {
-                                addSyntaxLookup(RobotTokenTypes.HEADING, results, NEW_LINE, 4);
+                                addSyntaxLookup(RobotTokenTypes.HEADING, results, NEW_LINE, 4, true);
                             } else {
-                                addSyntaxLookup(RobotTokenTypes.HEADING, results, NEW_LINE);
+                                addSyntaxLookup(RobotTokenTypes.HEADING, results, NEW_LINE, 0, true);
                                 if (isInSettings(heading)) {
                                     // This is the rule for adding settings and imports (Library, Test Setup)
                                     addSyntaxLookup(RobotTokenTypes.SETTING, results, SUPER_SPACE);
