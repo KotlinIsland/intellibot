@@ -225,7 +225,7 @@ public class RobotLexerTest extends TestCase {
         lexer.advance();
         assertState(lexer, "\n", RobotTokenTypes.WHITESPACE, SETTINGS_HEADING);
         lexer.advance();
-        assertState(lexer, "Force Tags", RobotTokenTypes.SETTING, IMPORT);
+        assertState(lexer, "Test Tags", RobotTokenTypes.SETTING, IMPORT);
         lexer.advance();
         assertState(lexer, "  ", RobotTokenTypes.WHITESPACE, IMPORT);
         lexer.advance();

@@ -15,6 +15,7 @@ public class RobotLexer extends LexerBase {
     protected static final int NONE = 0;
     protected static final int SETTINGS_HEADING = 1;
     protected static final int TEST_CASES_HEADING = 2;
+    protected static final int COMMENTS_HEADING = 12;
     protected static final int KEYWORDS_HEADING = 3;
     protected static final int VARIABLES_HEADING = 4;
     protected static final int IMPORT = 5;
@@ -44,6 +45,9 @@ public class RobotLexer extends LexerBase {
 
     private static boolean isTestCases(String line) {
         return line.matches("\\*\\*\\* (Test Cases?|Tasks?) \\*\\*\\*");
+    }
+    private static boolean isComments(String line) {
+        return "*** Comments ***".equals(line);
     }
 
     private static boolean isKeywords(String line) {
@@ -150,6 +154,9 @@ public class RobotLexer extends LexerBase {
             } else if (isTestCases(line)) {
                 this.level.clear();
                 this.level.push(TEST_CASES_HEADING);
+            } else if (isComments(line)) {
+                this.level.clear();
+                this.level.push(COMMENTS_HEADING);
             } else if (isKeywords(line) || isUserKeywords(line)) {
                 this.level.clear();
                 this.level.push(KEYWORDS_HEADING);
@@ -173,7 +180,10 @@ public class RobotLexer extends LexerBase {
             goToEndOfLine();
             this.currentToken = RobotTokenTypes.COMMENT;
         } else {
-            if (SETTINGS_HEADING == state) {
+            if (COMMENTS_HEADING == state) {
+                goToEndOfLine();
+                this.currentToken = RobotTokenTypes.COMMENT;
+            } else if (SETTINGS_HEADING == state) {
                 if (isSuperSpace(this.position)) {
                     skipWhitespace();
                 }

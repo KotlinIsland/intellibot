@@ -72,7 +72,7 @@
 "Collections", RobotTokenTypes.ARGUMENT, 5
 "\n", RobotTokenTypes.WHITESPACE, 1
 "\n", RobotTokenTypes.WHITESPACE, 1
-"Force Tags", RobotTokenTypes.SETTING, 5
+"Test Tags", RobotTokenTypes.SETTING, 5
 "  ", RobotTokenTypes.WHITESPACE, 5
 "Kyle", RobotTokenTypes.ARGUMENT, 5
 "  ", RobotTokenTypes.WHITESPACE, 5

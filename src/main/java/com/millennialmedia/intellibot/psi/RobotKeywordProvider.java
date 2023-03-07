@@ -30,6 +30,7 @@ public class RobotKeywordProvider {
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.HEADING, "*** Settings ***");
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.HEADING, "*** Setting ***");
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.HEADING, "*** Test Cases ***");
+        KEYWORD_TABLE.addSyntax(RobotTokenTypes.HEADING, "*** Comments ***");
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.HEADING, "*** Test Case ***");
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.HEADING, "*** Tasks ***");
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.HEADING, "*** Task ***");
@@ -43,6 +44,7 @@ public class RobotKeywordProvider {
 
         addRecommendation(RobotTokenTypes.HEADING, "*** Settings ***", "Settings");
         addRecommendation(RobotTokenTypes.HEADING, "*** Test Cases ***", "Test Cases");
+        addRecommendation(RobotTokenTypes.HEADING, "*** Comments ***", "Comments");
         addRecommendation(RobotTokenTypes.HEADING, "*** Tasks ***", "Task");
         addRecommendation(RobotTokenTypes.HEADING, "*** Keywords ***", "Keywords");
         addRecommendation(RobotTokenTypes.HEADING, "*** Variables ***", "Variables");
@@ -63,7 +65,7 @@ public class RobotKeywordProvider {
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.SETTING, "Task Template");
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.SETTING, "Documentation");
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.SETTING, "Metadata");
-        KEYWORD_TABLE.addSyntax(RobotTokenTypes.SETTING, "Force Tags");
+        KEYWORD_TABLE.addSyntax(RobotTokenTypes.SETTING, "Test Tags");
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.SETTING, "Default Tags");
         // KEYWORD_TABLE.addSyntax(RobotTokenTypes.SETTING, "Test Timeout");
         KEYWORD_TABLE.addSyntax(RobotTokenTypes.SETTING, "Setup");
@@ -78,7 +80,7 @@ public class RobotKeywordProvider {
         addRecommendation(RobotTokenTypes.SETTING, "Metadata", "Metadata");
         addRecommendation(RobotTokenTypes.SETTING, "Suite Setup", "Suite Setup");
         addRecommendation(RobotTokenTypes.SETTING, "Suite Teardown", "Suite Teardown");
-        addRecommendation(RobotTokenTypes.SETTING, "Force Tags", "Force Tags");
+        addRecommendation(RobotTokenTypes.SETTING, "Test Tags", "Test Tags");
         addRecommendation(RobotTokenTypes.SETTING, "Default Tags", "Default Tags");
         addRecommendation(RobotTokenTypes.SETTING, "Test Setup", "Test Setup");
         addRecommendation(RobotTokenTypes.SETTING, "Test Teardown", "Test Teardown");
@@ -147,7 +149,7 @@ public class RobotKeywordProvider {
         GLOBAL_SETTINGS.add("Task Template");
         GLOBAL_SETTINGS.add("Documentation");
         GLOBAL_SETTINGS.add("Metadata");
-        GLOBAL_SETTINGS.add("Force Tags");
+        GLOBAL_SETTINGS.add("Test Tags");
         GLOBAL_SETTINGS.add("Default Tags");
         GLOBAL_SETTINGS.add("Test Timeout");
         GLOBAL_SETTINGS.add("Task Timeout");
@@ -178,7 +180,7 @@ public class RobotKeywordProvider {
         SETTINGS_FOLLOWED_BY_STRINGS.add("Documentation");
         SETTINGS_FOLLOWED_BY_STRINGS.add("[Documentation]");
         SETTINGS_FOLLOWED_BY_STRINGS.add("Metadata");
-        SETTINGS_FOLLOWED_BY_STRINGS.add("Force Tags");
+        SETTINGS_FOLLOWED_BY_STRINGS.add("Test Tags");
         SETTINGS_FOLLOWED_BY_STRINGS.add("Default Tags");
         SETTINGS_FOLLOWED_BY_STRINGS.add("Test Timeout");
         SETTINGS_FOLLOWED_BY_STRINGS.add("Task Timeout");

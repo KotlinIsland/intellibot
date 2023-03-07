@@ -20,7 +20,7 @@ Library  db.orm.Orm
 Library  OperatingSystem
 Library  Collections
 
-Force Tags  Kyle  Advertiser  Dashboard  Component  #Other Tag
+Test Tags  Kyle  Advertiser  Dashboard  Component  #Other Tag
 Suite Teardown  This works
 
 *** Variables ***
