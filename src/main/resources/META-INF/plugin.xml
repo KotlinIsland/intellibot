@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>com.millennialmedia.intellibot@lte2000</id>
+    <id>com.millennialmedia.intellibot@kotlinisland</id>
     <name>IntelliBot #based</name>
     <version>1.15.191.8026</version>
     <vendor url="https://plugins.jetbrains.com/plugin/17424-intellibot-patched">Millennial Media</vendor>
