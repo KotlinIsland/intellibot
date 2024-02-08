@@ -1,35 +1,44 @@
+fun properties(key: String) = providers.gradleProperty(key)
+fun environment(key: String) = providers.environmentVariable(key)
+
 plugins {
-    kotlin("jvm") version "1.9.0-Beta"
-    id("org.jetbrains.intellij") version "1.13.2"
+    kotlin("jvm") version "1.9.22"
+    id("org.jetbrains.intellij") version "1.17.1"
 }
+
+group = properties("pluginGroup").get()
+version = properties("pluginVersion").get()
 
 repositories {
     mavenCentral()
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+        @Suppress("UnstableApiUsage")
+        vendor = JvmVendorSpec.JETBRAINS
+    }
 }
 
 dependencies{
     implementation("org.jetbrains:annotations:23.0.0")
 }
 
-val intellijVersion = System.getenv().getOrDefault("IDEA_VERSION", "PC-2023.1.2")
-
-val pythonPluginForVersion = mapOf(
-    "PC-2023.1.2" to "python-ce",
-    "IC-2023.1" to "PythonCore:231.5744.248",
-)
-
+// Configure Gradle IntelliJ Plugin - read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {
-    version.set(intellijVersion)
-    plugins.set(listOf(pythonPluginForVersion[intellijVersion]))
+    pluginName = properties("pluginName")
+    version = properties("platformVersion")
+    type = properties("platformType")
+
+    // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
+    plugins = properties("platformPlugins").map { it.split(',').map(String::trim).filter(String::isNotEmpty) }
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_17
 
-tasks.patchPluginXml {
-    sinceBuild.set("222")
-    untilBuild.set("999.*")
+tasks {
+    wrapper {
+        gradleVersion = properties("gradleVersion").get()
+    }
 }

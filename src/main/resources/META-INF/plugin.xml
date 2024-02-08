@@ -1,21 +1,15 @@
 <idea-plugin>
     <id>com.millennialmedia.intellibot@kotlinisland</id>
-    <name>IntelliBot #based</name>
+    <name>IntelliBased</name>
     <version>1.15.191.8026</version>
     <vendor url="https://plugins.jetbrains.com/plugin/17424-intellibot-patched">Millennial Media</vendor>
 
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true">com.intellij.modules.python</depends>
-    <!-- Ultimate -->
-    <!--suppress PluginXmlValidity -->
-    <depends optional="true">Pythonid</depends>
-    <!-- Community Edition -->
-    <!--suppress PluginXmlValidity -->
-    <depends optional="true">PythonCore</depends>
 
     <description><![CDATA[
-      <h1>IntelliBot, Robot Framework Support</h1>
-      <p>The IntelliBot plugin for IntelliJ/Pycharm adds smart editing features to support the <a href="http://robotframework.org/">Robot Framework</a>.</p>
+      <h1>IntelliBased, Robot Framework Support</h1>
+      <p>The IntelliBased plugin for IntelliJ/Pycharm adds smart editing features to support the <a href="http://robotframework.org/">Robot Framework</a>.</p>
       <p>Find more details at <a href="https://plugins.jetbrains.com/plugin/17424-intellibot-patched">Marketplace</a> or <a href="https://github.com/lte2000/intellibot">Github</a>.</p>
       <br>
       <p>Make sure to <a href="https://github.com/mtrubs/intellibot/wiki/Python-Interpreter">setup your IDE correctly</a> to gain Python support.</p>
